@@ -104,7 +104,7 @@ namespace Accela.Web.SDK
             return response;
         }
 
-        public static KeyValuePair<string, object> SendPostRequest(string url, Object request, string token, string appId)
+        public static RESTResponse SendPostRequest(string url, Object request, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "POST", appId, token);
             string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request);
@@ -118,11 +118,11 @@ namespace Accela.Web.SDK
 
             // Receive
             var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            KeyValuePair<string, object> response;
+            RESTResponse response = new RESTResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                response = Newtonsoft.Json.JsonConvert.DeserializeObject<KeyValuePair<string, object>>(result);
+                response = (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
             }
             return response;
         }
@@ -176,7 +176,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public static Object SendGetRequest(string url, string token, string appId, object response)
+        public static RESTResponse SendGetRequest(string url, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "GET", appId, token);
             var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
@@ -185,7 +185,8 @@ namespace Accela.Web.SDK
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = streamReader.ReadToEnd();
-                return ProcessRESTResponse(response, result);
+                RESTResponse response = new RESTResponse();
+                return (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
             }
         }
 
@@ -206,11 +207,18 @@ namespace Accela.Web.SDK
             return message;
         }
 
-        #region private methods
-        private static Object ProcessRESTResponse(Object toReturn, string result)
+        public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response, ref PaginationInfo paginationInfo)
         {
-            RESTResponse response = new RESTResponse();
-            response = (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
+            if (response != null && response.Result != null && response.Status == 200)
+            {
+                paginationInfo = response.Page;
+                return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
+            }
+            return null;
+        }
+
+        public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response)
+        {
             if (response != null && response.Result != null && response.Status == 200)
             {
                 return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
@@ -218,6 +226,7 @@ namespace Accela.Web.SDK
             return null;
         }
 
+        #region private methods
         private static string GetFileInfo(string documentPath, string description)
         {
             StringBuilder str = new StringBuilder("[{ \"serviceProviderCode\": \"BPTMSTR\", \"fileName\": \"{fileName}\", \"type\": \"{fileType}\", \"description\": \"{description}\"}]");

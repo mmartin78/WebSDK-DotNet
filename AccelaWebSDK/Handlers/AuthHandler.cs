@@ -48,9 +48,12 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get user profile
-                UserProfile userProfile = new UserProfile();
                 string url = apiUrl + ConfigurationReader.GetValue("GetUserProfile");
-                return (UserProfile)HttpHelper.SendGetRequest(url, token, this.appId, userProfile);
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                UserProfile userProfile = new UserProfile();
+                return (UserProfile)HttpHelper.ConvertToSDKResponse(userProfile, response);
             }
             catch (WebException webException)
             {

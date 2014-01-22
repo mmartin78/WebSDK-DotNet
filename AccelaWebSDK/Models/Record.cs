@@ -33,14 +33,20 @@ namespace Accela.Web.SDK.Models
 
     public class ConstructionType
     {
+        public string text { get; set; }
+        public string value { get; set; }
     }
 
     public class Priority
     {
+        public string text { get; set; }
+        public string value { get; set; }
     }
 
     public class Severity
     {
+        public string text { get; set; }
+        public string value { get; set; }
     }
 
     public class ReportedChannel
@@ -51,10 +57,14 @@ namespace Accela.Web.SDK.Models
 
     public class StatusReason
     {
+        public string value { get; set; }
+        public string text { get; set; }
     }
 
     public class ReportedType
     {
+        public string value { get; set; }
+        public string text { get; set; }
     }
 
     public class Status
@@ -65,80 +75,68 @@ namespace Accela.Web.SDK.Models
 
     public class Record
     {
-        public string serviceProviderCode { get; set; }
-        public string id { get; set; }
-        public string customId { get; set; }
-        public int trackingId { get; set; }
-        public string name { get; set; }
+        public Status status { get; set; }
+        public string firstIssuedDate { get; set; }
+        public string enforceOfficerId { get; set; }
+        public double estimatedCostPerUnit { get; set; }
+        public string enforceDepartment { get; set; }
+        public string closedDate { get; set; }
+        public string inspectorName { get; set; }
         public string module { get; set; }
+        public string estimatedDueDate { get; set; }
+        public string assignedDate { get; set; }
+        public double costPerUnit { get; set; }
+        public string reportedDate { get; set; }
+        public double actualProductionUnit { get; set; }
+        public string appearanceDate { get; set; }
+        public string id { get; set; }
+        public List<Address> addresses { get; set; }
+        public Severity severity { get; set; }
+        public List<Contact> contacts { get; set; }
+        public string scheduledDate { get; set; }
+        public double totalJobCost { get; set; }
+        public double estimatedProductionUnit { get; set; }
+        public string completeDate { get; set; }
+        public string name { get; set; }
+        public Priority priority { get; set; }
+        public int trackingId { get; set; }
+        public string enforceOfficerName { get; set; }
+        public string statusDate { get; set; }
+        public string customId { get; set; }
         public RecordType type { get; set; }
         public string openedDate { get; set; }
-        public bool isPublicOwned { get; set; }
-        public ConstructionType constructionType { get; set; }
-        public Priority priority { get; set; }
-        public Severity severity { get; set; }
-        public ReportedChannel reportedChannel { get; set; }
-        public StatusReason statusReason { get; set; }
-        public string statusDate { get; set; }
-        public string createdBy { get; set; }
-        public int totalJobCost { get; set; }
-        public int undistributedCost { get; set; }
-        public int totalFee { get; set; }
-        public int totalPay { get; set; }
-        public int balance { get; set; }
-        public bool isBooking { get; set; }
-        public bool isInfraction { get; set; }
-        public bool isMisdemeanor { get; set; }
-        public bool isOffenseWitnessed { get; set; }
-        public bool isDefendantSignature { get; set; }
-        public string initiatedProduct { get; set; }
-        public ReportedType reportedType { get; set; }
-        public Status status { get; set; }
-        public string reportedDate { get; set; }
         public string recordClass { get; set; }
-        public int? estimatedProductionUnit { get; set; }
-        public int? actualProductionUnit { get; set; }
+        public string assignedToStaff { get; set; }
+        public string inspectorDepartment { get; set; }
+        public int numberOfBuildings { get; set; }
         public string description { get; set; }
+        public string closedByDepartment { get; set; }
+        public double jobValue { get; set; }
+        public double totalFee { get; set; }
+        public ConstructionType constructionType { get; set; }
+        public double totalPay { get; set; }
+        public double inPossessionTime { get; set; }
+        public StatusReason statusReason { get; set; }
+        public string createdBy { get; set; }
+        public string appearanceDayOfWeek { get; set; }
+        public double undistributedCost { get; set; }
+        public string completedByDepartment { get; set; }
+        public List<Professional> professionals { get; set; }
+        public List<Owner> owners { get; set; }
+        public double overallApplicationTime { get; set; }
+        public string serviceProviderCode { get; set; }
+        public string shortNotes { get; set; }
+        public string assignedToDepartment { get; set; }
+        public ReportedType reportedType { get; set; }
+        public double estimatedTotalJobCost { get; set; }
+        public string closedByStaff { get; set; }
+        public ReportedChannel reportedChannel { get; set; }
+        public int housingUnits { get; set; }
+        public double balance { get; set; }
+        public string initiatedProduct { get; set; }
+        public List<Parcel> parcels { get; set; }
+        public string inspectorId { get; set; }
     }
 }
 
-//{
-//    "status": 200,
-//    "result": [
-//        {
-//            "License Duration": null,
-//            "Age": null,
-//            "Service Dog": null,
-//            "Spayed/Neutered": null,
-//            "Dominant Color": null,
-//            "Secondary Color": null,
-//            "_Id_": "LIC_PET_LIC&GENERAL INFORMATION",
-//            "Pet Name": null,
-//            "Weight": null,
-//            "Microchip Number": null,
-//            "Breed": null,
-//            "Gender": null,
-//            "Birthdate": null,
-//            "Pet License Tag Number": null,
-//            "Species": null
-//        },
-//        {
-//            "Vaccination Expiration Date": null,
-//            "Rabies Tag Number": null,
-//            "Rabies Vaccination Date": null,
-//            "Vaccination Lot Number": null,
-//            "_Id_": "LIC_PET_LIC&VACCINATION INFORMATION"
-//        },
-//        {
-//            "Danger Level": null,
-//            "Reason For Designation": null,
-//            "_Id_": "LIC_PET_LIC&PET INFORMATION"
-//        },
-//        {
-//            "Date Diagnosed": null,
-//            "Documented Health Condition": null,
-//            "Date of Onset Clinical Signs": null,
-//            "_Id_": "LIC_PET_LIC&RABIES VACC EXEMPTION REQUESTS"
-//        }
-//    ]
-//}
+

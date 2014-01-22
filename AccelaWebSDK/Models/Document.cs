@@ -27,14 +27,14 @@ namespace Accela.Web.SDK.Models
         public Status status { get; set; }
         public string type { get; set; }
         public string modifiedBy { get; set; }
-        public int id { get; set; }
+        public string id { get; set; }
         public string department { get; set; }
         public string uploadedDate { get; set; }
         public string uploadedBy { get; set; }
         public string statusDate { get; set; }
         public string modifiedDate { get; set; }
         public GuidesheetItem guidesheetItem { get; set; }
-        public int size { get; set; }
+        public string size { get; set; }
     }
 
 }

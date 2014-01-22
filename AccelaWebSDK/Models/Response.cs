@@ -10,21 +10,16 @@ namespace Accela.Web.SDK.Models
     public class RESTResponse
     {
         public int Status { get; set; }
-        public Page Page { get; set; }
+        public PaginationInfo Page { get; set; }
         public Object Result { get; set; }
     }
 
-    public class Response // TODO Temp calss remove
-    {
-        public int Status { get; set; }
-        public Page Page { get; set; }
-        public Object Result { get; set; }
-    }
-
-    public class Page
+    public class PaginationInfo
     {
         public int offset { get; set; }
         public int limit { get; set; }
         public bool hasmore { get; set; }
     }
+
+    public class Response { } // todo remove
 }
