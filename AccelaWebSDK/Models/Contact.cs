@@ -42,6 +42,18 @@ namespace Accela.Web.SDK.Models
         public string value { get; set; }
     }
 
+    public class ContactAddress
+    {
+        public string city { get; set; }
+        public string zip { get; set; }
+        public Country country { get; set; }
+        public State state { get; set; }
+        public string addressLine2 { get; set; }
+        public string addressLine3 { get; set; }
+        public string addressLine1 { get; set; }
+        public string postalCode { get; set; }
+    }
+
     public class Contact
     {
         public string comment { get; set; }
@@ -60,7 +72,7 @@ namespace Accela.Web.SDK.Models
         public string title { get; set; }
         public RecordId recordId { get; set; }
         public string tradeName { get; set; }
-        public RecordType type { get; set; }
+        public ContactType type { get; set; }
         public string email { get; set; }
         public string postOfficeBox { get; set; }
         public string phone3CountryCode { get; set; }
@@ -71,7 +83,7 @@ namespace Accela.Web.SDK.Models
         public string referenceContactId { get; set; }
         public string phone1CountryCode { get; set; }
         public string phone2CountryCode { get; set; }
-        public Address address { get; set; }
+        public ContactAddress address { get; set; }
         public string fullName { get; set; }
         public string firstName { get; set; }
         public Gender gender { get; set; }
@@ -79,6 +91,5 @@ namespace Accela.Web.SDK.Models
         public string lastName { get; set; }
         public Relation relation { get; set; }
         public PreferredChannel preferredChannel { get; set; }
-        public ContactType contacttype { get; set; }
     }
 }

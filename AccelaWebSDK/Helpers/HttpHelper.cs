@@ -58,7 +58,7 @@ namespace Accela.Web.SDK
             return response;
         }
 
-        public static Object SendUploadRequest(string documentPath, string description, string url, Object response, string token, string appId)
+        public static RESTResponse SendUploadRequest(string documentPath, string description, string url, string token, string appId)
         {
             // Prepare Request
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -93,15 +93,7 @@ namespace Accela.Web.SDK
                     }
                 }
             }
-
-            // Receive
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                response = Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
-            }
-            return response;
+            return ReceiveRESTResponse(httpRequest);
         }
 
         public static RESTResponse SendPostRequest(string url, Object request, string token, string appId)
@@ -115,16 +107,7 @@ namespace Accela.Web.SDK
                 s.Write(requestString);
                 s.Flush();
             }
-
-            // Receive
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            RESTResponse response = new RESTResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                response = (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
-            }
-            return response;
+            return ReceiveRESTResponse(httpRequest);
         }
 
         public static MemoryStream SendDownloadRequest(string url, MemoryStream response, string token, string appId)
@@ -144,7 +127,7 @@ namespace Accela.Web.SDK
             return response;
         }
 
-        public static void SendPutRequest(string url, Object request, string token, string appId)
+        public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "PUT", appId, token);
             string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request);
@@ -155,39 +138,19 @@ namespace Accela.Web.SDK
                 s.Write(requestString);
                 s.Flush();
             }
-
-            // Receive
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-            }
+            return ReceiveRESTResponse(httpRequest);
         }
 
-        public static void SendDeleteRequest(string url, string token, string appId)
+        public static RESTResponse SendDeleteRequest(string url, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "DELETE", appId, token);
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-
-            // Send
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-            }
+            return ReceiveRESTResponse(httpRequest);
         }
 
         public static RESTResponse SendGetRequest(string url, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "GET", appId, token);
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
-
-            // Send
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                var result = streamReader.ReadToEnd();
-                RESTResponse response = new RESTResponse();
-                return (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(result, response.GetType());
-            }
+            return ReceiveRESTResponse(httpRequest);
         }
 
         public static string HandleWebException(WebException webException, string message)
@@ -209,10 +172,10 @@ namespace Accela.Web.SDK
 
         public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response, ref PaginationInfo paginationInfo)
         {
-            if (response != null && response.Result != null && response.Status == 200)
+            if (response != null && response.Result != null)
             {
                 paginationInfo = response.Page;
-                return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
+                return ConvertToSDKResponse(toReturn, response);
             }
             return null;
         }
@@ -249,6 +212,34 @@ namespace Accela.Web.SDK
             request.Headers.Add(appIdHeader, appId);
             request.Headers.Add("Authorization", token);
             return request;
+        }
+
+        private static RESTResponse ReceiveRESTResponse(HttpWebRequest httpRequest)
+        {
+            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var resp = streamReader.ReadToEnd();
+                RESTResponse response = new RESTResponse();
+                response = (RESTResponse)Newtonsoft.Json.JsonConvert.DeserializeObject(resp, response.GetType());
+
+                if (response != null)
+                {
+                    if (response.Status != 200)
+                    {
+                        string message = string.Format("Request Failed with Code {0} and Error {1} ", response.Code, response.Message);
+                        throw new Exception(message);
+                    } 
+                    else if (response.Status == 200 && response.Result.ToString().Contains("failedCount"))
+                    {
+                        Result result = new Result();
+                        result = (Result)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
+                        if (result.failedCount > 0)
+                            throw new Exception("Request Failed");
+                    }
+                }
+                return response;
+            }
         }
         #endregion
     }

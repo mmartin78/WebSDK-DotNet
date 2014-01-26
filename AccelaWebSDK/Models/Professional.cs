@@ -9,7 +9,7 @@ namespace Accela.Web.SDK.Models
     public class Professional
     {
         public string comment { get; set; }
-        public LicenseType licenseType { get; set; }
+        public ProfessionnalLicenseType licenseType { get; set; }
         public string licenseNumber { get; set; }
         public string suffix { get; set; }
         public string primary { get; set; }
@@ -51,7 +51,7 @@ namespace Accela.Web.SDK.Models
         public Country country { get; set; }
     }
 
-    public class LicenseType
+    public class ProfessionnalLicenseType
     {
         public string text { get; set; }
         public string value { get; set; }

@@ -47,11 +47,12 @@
   <ItemGroup>
     <Compile Include="Contracts\IAgency.cs" />
     <Compile Include="Contracts\IAuth.cs" />
+    <Compile Include="Contracts\IDocument.cs" />
     <Compile Include="Contracts\IRecord.cs" />
-    <Compile Include="CustomFieldName.cs" />
     <Compile Include="Handlers\AgencyHandler.cs" />
     <Compile Include="Handlers\AuthHandler.cs" />
     <Compile Include="Handlers\BaseHandler.cs" />
+    <Compile Include="Handlers\DocumentHandler.cs" />
     <Compile Include="Handlers\RecordHandler.cs" />
     <Compile Include="Helpers\HttpHelper.cs" />
     <Compile Include="Helpers\ConfigurationReader.cs" />
