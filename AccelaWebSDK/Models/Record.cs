@@ -24,10 +24,10 @@ namespace Accela.Web.SDK.Models
         public string value { get; set; }
         public string text { get; set; }
         public string module { get; set; }
-        public string display { get; set; }
         public bool createable { get; set; }
-        public bool accessable { get; set; }
-        public bool editable { get; set; }
+        public bool readable { get; set; }
+        public bool updatable { get; set; }
+        public bool deletable { get; set; }
         public bool searchable { get; set; }
     }
 
@@ -71,6 +71,56 @@ namespace Accela.Web.SDK.Models
     {
         public string value { get; set; }
         public string text { get; set; }
+    }
+
+    public class RecordDetail
+    {
+        public string serviceProviderCode { get; set; }
+        public int trackingId { get; set; }
+        public string name { get; set; }
+        public string module { get; set; }
+        public RecordType type { get; set; }
+        public string reportedDate { get; set; }
+        public string shortNotes { get; set; }
+        public string description { get; set; }
+        public string assignedToDepartment { get; set; }
+        public string assignedToStaff { get; set; }
+        public string assignedDate { get; set; }
+        public string completedByDepartment { get; set; }
+        public string completedByStaff { get; set; }
+        public string completedDate { get; set; }
+        public string closedByDepartment { get; set; }
+        public string closedByStaff { get; set; }
+        public string closedDate { get; set; }
+        public string inspectorName { get; set; }
+        public string inspectorId { get; set; }
+        public string enforceDepartment { get; set; }
+        public string enforceOfficerId { get; set; }
+        public string enforceOfficerName { get; set; }
+        public string appearanceDate { get; set; }
+        public Priority priority { get; set; }
+        public Severity severity { get; set; }
+        public ReportedChannel reportedChannel { get; set; }
+        public StatusReason statusReason { get; set; }
+        public string statusDate { get; set; }
+        public string createdBy { get; set; }
+        public string scheduledDate { get; set; }
+        public string firstIssuedDate { get; set; }
+        public bool isBooking { get; set; }
+        public bool isInfraction { get; set; }
+        public bool isMisdemeanor { get; set; }
+        public bool isOffenseWitnessed { get; set; }
+        public bool isDefendantSignature { get; set; }
+        public string completeDate { get; set; }
+        public string inspectorDepartment { get; set; }
+        public ReportedType reportedType { get; set; }
+        public Status status { get; set; }
+        public int estimatedProductionUnit { get; set; }
+        public int actualProductionUnit { get; set; }
+    }
+
+    public class RecordFilter : Record
+    {      
     }
 
     public class Record
@@ -136,6 +186,37 @@ namespace Accela.Web.SDK.Models
         public string initiatedProduct { get; set; }
         public List<Parcel> parcels { get; set; }
         public string inspectorId { get; set; }
+
+        public void ValidateRecordForCreate()
+        {
+            if (this == null)
+            {
+                throw new Exception("Null request provided");
+            }
+            if (this.type == null || this.type.id == null)
+            {
+                throw new Exception("A Valid Record Type Id is not provided");
+            }
+            else
+            {
+                // Licenses-Animal-Dog-Application
+                string[] recordTypeAttributes = this.type.id.Split('-');
+                if (recordTypeAttributes != null && recordTypeAttributes.Length == 4)
+                {
+                    if (string.IsNullOrEmpty(this.type.group) && !string.IsNullOrEmpty(recordTypeAttributes[0]))
+                    {
+                        this.type.group = recordTypeAttributes[0];
+                        this.type.module = recordTypeAttributes[0];
+                    }
+                    if (string.IsNullOrEmpty(this.type.type) && !string.IsNullOrEmpty(recordTypeAttributes[1]))
+                        this.type.type = recordTypeAttributes[1];
+                    if (string.IsNullOrEmpty(this.type.subType) && !string.IsNullOrEmpty(recordTypeAttributes[2]))
+                        this.type.subType = recordTypeAttributes[2];
+                    if (string.IsNullOrEmpty(this.type.category) && !string.IsNullOrEmpty(recordTypeAttributes[3]))
+                        this.type.category = recordTypeAttributes[3];
+                }
+            }
+        }
     }
 }
 

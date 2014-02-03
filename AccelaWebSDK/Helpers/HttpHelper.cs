@@ -230,7 +230,7 @@ namespace Accela.Web.SDK
                         string message = string.Format("Request Failed with Code {0} and Error {1} ", response.Code, response.Message);
                         throw new Exception(message);
                     } 
-                    else if (response.Status == 200 && response.Result.ToString().Contains("failedCount"))
+                    else if (response.Status == 200 && response.Result != null && response.Result.ToString().Contains("failedCount"))
                     {
                         Result result = new Result();
                         result = (Result)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());

@@ -47,7 +47,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void DownloadDocument(string filePath, string documentId, string token) // Sends back Document not sure how to get the actual stream
+        public void DownloadDocument(string filePath, string documentId, string token) // TODO 
         {
             MemoryStream memoryStream = null;
             FileStream fileStream = null;

@@ -17,6 +17,7 @@ namespace Accela.Web.SDK
         RecordId CreateRecordFinalize(Record record, string token);
         Record UpdateRecordDetail(Record record, string token);
         void DeleteRecord(string recordId, string token);
+        List<Record> SearchRecords(string token, RecordFilter filter, string fields, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1);
 
         // Related Records
         List<Record> GetRelatedRecords(string recordId, string token);

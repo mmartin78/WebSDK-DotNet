@@ -114,6 +114,36 @@ namespace Accela.Web.SDK
             }
         }
 
+        public List<Record> SearchRecords(string token, RecordFilter filter, string fields, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
+        {
+            try
+            {
+                // validate
+                RequestValidator.ValidateToken(token);
+
+                // create url
+                StringBuilder url = new StringBuilder(apiUrl);
+                url = url.Append(ConfigurationReader.GetValue("SearchRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
+                if (!string.IsNullOrEmpty(fields))
+                   url.Append("&fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
+
+                // create response
+                List<Record> records = new List<Record>();
+                records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                return records;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Search Records :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Search Records :"));
+            }
+        }
+
         public List<Record> GetRecords(string token, string filter, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
         {
             try
@@ -167,7 +197,7 @@ namespace Accela.Web.SDK
             return CreateRecordInternal(record, token, "");
         }
 
-        public Record UpdateRecordDetail(Record record, string token) // Doesn't work 400 
+        public Record UpdateRecordDetail(Record record, string token) // TODO Doesn't work 400 
         {
             try
             {
@@ -230,7 +260,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public List<ContactType> GetContactTypes(string token) // 404 BUg opened
+        public List<ContactType> GetContactTypes(string token) // TODO 404 BUg opened
         {
             try
             {
@@ -256,7 +286,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public List<Contact> GetRecordContacts(string recordId, string token, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1) // TODO add offset & limit
+        public List<Contact> GetRecordContacts(string recordId, string token, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
         {
             try
             {
@@ -268,7 +298,7 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get contacts
-                string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId);
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -291,14 +321,12 @@ namespace Accela.Web.SDK
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
+                contacts = RequestValidator.ValidateContactsForCreate(contacts, recordId);
                 if (String.IsNullOrWhiteSpace(recordId))
                 {
                     throw new Exception("Null Record Id provided");
-                }
-                if (contacts == null)
-                {
-                    throw new Exception("Null request provided");
-                }
+                } 
+               
 
                 // Update 
                 string url = apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("recordId", recordId);
@@ -605,10 +633,7 @@ namespace Accela.Web.SDK
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
-                if (record == null)
-                {
-                    throw new Exception("Null request provided");
-                }
+                record.ValidateRecordForCreate();
 
                 // Create
                 string url = null;

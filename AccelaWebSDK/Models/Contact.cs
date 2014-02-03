@@ -51,7 +51,6 @@ namespace Accela.Web.SDK.Models
         public string addressLine2 { get; set; }
         public string addressLine3 { get; set; }
         public string addressLine1 { get; set; }
-        public string postalCode { get; set; }
     }
 
     public class Contact

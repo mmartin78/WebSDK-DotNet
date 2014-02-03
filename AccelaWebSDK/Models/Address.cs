@@ -79,7 +79,7 @@ namespace Accela.Web.SDK.Models
         public string levelStart { get; set; }
         public string fullAddress { get; set; }
         public string addressLine1 { get; set; }
-        public string houseNumberStart { get; set; }
+        //public string houseNumberStart { get; set; }
         public Primary primary { get; set; }
         public string unitEnd { get; set; }
         public string county { get; set; }
