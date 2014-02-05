@@ -11,8 +11,7 @@ namespace Accela.Web.SDK.Models
         public string name { get; set; }
         public string serviceProviderCode { get; set; }
         public bool enabled { get; set; }
-        public string display { get; set; }
+        public bool isForDemo { get; set; }
         public bool hostedACA { get; set; }
-        public string iconName { get; set; }
     }
 }

@@ -9,19 +9,19 @@ using Newtonsoft.Json;
 
 namespace ConsoleApplication1
 {
-    // search record - done
+    // search record - done, bug
     // create record - done
     // create contacts - done
-    // update custom fields - done
+    // update custom fields - done, bug
     // upload doc - bug
     // download doc - bug
     // delete doc
-    // get record - done
-    // get records - done
-    // get custom fields - done
-    // get contacts - done
-    // get docs - done
-    // get doc - done
+    // get record - done, bug for citizen
+    // get records - done, bug for citizen
+    // get custom fields - done, bug for citizen
+    // get contacts - done, bug for citizen
+    // get docs - done, bug for citizen
+    // get doc - done, bug for citizen
 
     class Program
     {
@@ -39,30 +39,45 @@ namespace ConsoleApplication1
             string documentId = "DUB13-00000-00005-401";
             string rId = "BPTMSTR-14EST-00000-00017";
 
-            string token = "ZQZmZCmHyhIH94CXgLIY-Xb6UxhTwh4sYixKaFXYP0YIVbgFc24XJht7ALCNrM08YpAXmcaygMPBtvZfhnuBFkXV5K0kyJCsOfN1SdaKpcS3hEHRh9ORzuqFOOt-RgX71Cgfwveae7GZasJnWbqt0wC8QfGFTTV0leUCkysJpVmsDCBTEGC2fp0Yy5flCI45J5lJfRIxScmw2n5SStYfZMniv1MHTUDobDtQzHjM_O4_NSuY7qVDV2U2gOUJfUbtHDgaX6rnhkKeXsEy7y3kqJr3R5dHQ5A10dG6bAZ1iUj8EgXsBmeiOlh3D4TO4acbt4vvsR4sikMDAE9w_2oZpiaKd7iGkNcuqMdW1MApnTH2fmpXgV786zLQ6esXcD6u_ot0NJFLSgikSyuKfbGWUNGWRXv4umgHjIdbJ_JVipQoKTS1a3sfv-MmU6BwcEH3t05d7z-7PZJe7tOIlMwqy2YAAxz3SIl2e2-3hRULvTgArUKJh948MMXWUSiZeUNXV3kkIoj149Y65jK1MLkBue34xR71PJetxg-6Ze1TyC41";
-            //Citizen string token = "vSKHIfBzwX-hBJ8NFdwOs3nvYjQ-iOLrsRH2fuIGGmpFThTxvargTjj1o7uE7E4wuQvoLGEOzu-FDbcTi9ArkIGz1fiCGH9i-1ibgFYH3sj6o3ItpFwBZyScWc1uHmvk5pT55S1ep-ABxJjZbj7L76s0PfTeT__XasMgZWeCHMPNjfN2fRU2ljLV6Q-3RGN4urt0To07tyqZIbKPOPoWw00xwzKu_xulXZdkSy-AVtPxu8iAZlXQrtX9c9F3k3uDRC9VFXc8OlWwVWfncsrb7U5jOLQ8B-Me8X-LsUoVXo9F3vb-FlDwTBFQC5eda4jiGMD_e0RkuRWFK2n9ksqAiqUIGoUjPYwQCzFXxIN6lTU2xmCuv3dhMGPKOkKg9A4QYYS5ag78HrvQY_1dmCdarDhJ6Xu7zulCQu8w-HStoEe9i8fSEuq0RCCpRmG73sDen2VVoUNjzSkVk_El5U-rY5KtA3eQOr_T-ZheLc2O8UZcfZh82Zs9zXUnQcLHGLr51I3zUckKa_pNoUZRsDJFwqThCv5i9RclK-6Xy8MxYBc1";
+            string token = "ha4BkHZp7RML_70ZN84ijzic4zHmVnIGWIiuQ9vVtbirnW7VahYCSqZQ6An8CRcP3Ar6zPn8NBWYT7PfiZrKcqvEqjmMi-Yso56sZ4Cno4HG9TuBzwGIZgt93TV5k_IFG9F8ToLStFZL9ex1cJKf5Q6Gq17Qqw1zEl2zxO6xqLaoqUjripltsT_0qXKVKnvBorAsXIy34doouBhSEQ1KjyhZxAAtemc92vb94rZptStnaCPDJKNr4WnvuQwCAYXMf44cVy0TKAkTGkklhWzFfpy8cfoZsdidPi96mPFzbl8SbIIK0Kb2K0xfvYdIM2ugZVLLQbwHitL8v8TipBjDDKG2IRCUoI3TD8lUfXO52xYbVRWkQy_Z5GVCOfKrntPlFHOLdMByxOjmI4RQX1mtaMG3mBlZbpRNnSqrblvc9GhY7vRocJyS1yjTigZV56wHPkuhAVyvsdLs2CY5A798Foth2ewLesscNMnvMeEe9SfCEa7dZKqIdz1Q3yBQJz28-kn6OPS3OTKId31Qyx8fRBZPQscXpjcv_5hIxgu0gVkEdY-f5uXQ7rFkQ9QoNBDr0";
+            // citizen string token = "gKUREWXm1DkIMO702NZNS-NtaZpVJpA4lKcewZD3CCvtAa9bN2k4_0CdzSTKaFkFJKzXiJihvNFJ8oPAgWLfbM-WGsprx5ZnB-UQYt6v3fzbrnpaAdlTDWoX9s3FElNpO5f79aBoKYpvkozYL3PpvniKFj2SL181PDqAH77di4nOX5F9q1N3UTCfVLyKUBYANfyPVDByYukHdCDhG_6DLlB9vc_kw2gwB4EQKHGMkCAyywTSA6nwBXwvmCh064tc_36bms6l_7aemoe0tH9xVUsy61VLQcw0gHcf723Ru2yb-lfZEA6WK4z7UnpGUQoD50HxSEduSx5hOmsVQCdCuheZ0JjlXE44ln3xAq6ZxlhQvzIxleIOA8Mq2tVE3pSNz9727QZiiSPATkNYYve0lYKTwdCS9qsk6IkjOgiaxRQxfQLR4vzXkyXqDElp5RKcKqLca64jap70EmDtgkXtAsOZw1NPDesjB214VObov90yDAAKSqMkpJrT1CqhggHaXnCmDj--BqOXt1z-QwTb3g2";
 
-            IRecord rec = new RecordHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
-            IDocument doc = new DocumentHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
+            IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
+            IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
 
-            //doc.DownloadDocument(@"C:\Swapnali\TestPurposes\test.jpeg", documentId, token);
+
+            //Record record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
+            //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" }}};
+            //RecordId r1 = rec.CreateRecordInitialize(record, token);
+            Record record = rec.GetRecord("BPTMSTR-14EST-00000-00032", token);
+            record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
+            RecordId r2 = rec.CreateRecordFinalize(record, token);
+
+            //IRecord rec = new RecordHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            //IDocument doc = new DocumentHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            //IAgency a = new AgencyHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+
+            //doc.DownloadDocument(@"C:\Swapnali\TestPurposes\test.jpeg", "401", token);
             //rec.CreateRecordDocument(@"C:\Swapnali\TestPurposes\Accela.doc", "test document", recordId, token);
             //List<Dictionary<string, string>> s = rec.GetRecordCustomFields(recordId, token);
             //rec.UpdateRecordCustomFields(recordId, s, token);
-            //List<Record> records = rec.GetRecords(token, filter, ref p, -1, 50);
+            List<Record> records = rec.GetRecords(token, filter, ref p, -1, 50);
 
-            //List<Record> records = rec.SearchRecords(token, new RecordFilter { module = "Licenses" }, null, ref p);
-            Record record = rec.GetRecord(recordId, token);
+            records = rec.SearchRecords(token, new RecordFilter { module = "Licenses" }, null, ref p);
+            //Agency agency = a.GetAgency(token, "BPTMSTR");
+            //a.GetAgencyLogo(@"c:\swapnali\", token, "BPTMSTR");
+            record = rec.GetRecord(recordId, token);
             //rec.UpdateRecordDetail(record, token);
-            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            List<Document> docs = rec.GetRecordDocuments(recordId, token);
             List<Contact> contacts = rec.GetRecordContacts(recordId, token, ref p);
 
             record = new Record { type = new RecordType { id = "Licenses-Animal-Dog-Application" } };
             record.contacts = contacts;
             //record = rec.GetRecord(rId, token);
-            RecordId r1 = rec.CreateRecordInitialize(record, token);
-            record = rec.GetRecord(r1.id, token);
-            RecordId r2 = rec.CreateRecordFinalize(record, token);
+            //RecordId r1 = rec.CreateRecordInitialize(record, token);
+            //record = rec.GetRecord(r1.id, token);
+            //RecordId r2 = rec.CreateRecordFinalize(record, token);
             //if (r != null)
             //{
             //    List<Contact> cs = new List<Contact>();

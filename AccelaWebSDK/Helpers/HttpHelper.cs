@@ -112,8 +112,13 @@ namespace Accela.Web.SDK
 
         public static MemoryStream SendDownloadRequest(string url, MemoryStream response, string token, string appId)
         {
-            HttpWebRequest httpRequest = PrepareRequest(url, "GET", appId, token);
-            var httpResponse = (HttpWebResponse)httpRequest.GetResponse();
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            request.ContentType = "multipart/form-data";
+            request.Accept = accept;
+            request.Headers.Add(appIdHeader, appId);
+            request.Headers.Add("Authorization", token);
+            var httpResponse = (HttpWebResponse)request.GetResponse();
 
             // Receive
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
@@ -182,7 +187,7 @@ namespace Accela.Web.SDK
 
         public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response)
         {
-            if (response != null && response.Result != null && response.Status == 200)
+            if (response != null && response.Result != null && (response.Status == 200 || response.Status == 0))
             {
                 return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
             }
@@ -225,6 +230,8 @@ namespace Accela.Web.SDK
 
                 if (response != null)
                 {
+                    if (response.Status == 0)
+                        return response;
                     if (response.Status != 200)
                     {
                         string message = string.Format("Request Failed with Code {0} and Error {1} ", response.Code, response.Message);

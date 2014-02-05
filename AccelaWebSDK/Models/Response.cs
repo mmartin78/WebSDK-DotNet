@@ -23,7 +23,15 @@ namespace Accela.Web.SDK.Models
         public bool hasmore { get; set; }
     }
 
-    public class Response { } // todo remove
+    public class ResultPagedBase
+    {
+        public PaginationInfo PageInfo { get; set; }
+    }
+
+    public class ResultDataPaged<T> : ResultPagedBase
+    {
+        public IEnumerable<T> Data { get; set; }
+    }
 
     public class Result
     {
@@ -32,4 +40,6 @@ namespace Accela.Web.SDK.Models
         public int successCount { get; set; }
         public List<string> successIDs { get; set; }
     }
+
+    public class Response {} // TODO Remove
 }

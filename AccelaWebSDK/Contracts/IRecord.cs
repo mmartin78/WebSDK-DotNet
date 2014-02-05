@@ -11,13 +11,13 @@ namespace Accela.Web.SDK
     {
         // Records
         Record GetRecord(string recordId, string token);
-        List<Record> GetRecords(string token, string filter, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1);
+        ResultDataPaged<Record> GetRecords(string token, string filter, int offset = -1, int limit = -1);
         RecordId CreateRecord(Record record, string token);
         RecordId CreateRecordInitialize(Record record, string token);
         RecordId CreateRecordFinalize(Record record, string token);
         Record UpdateRecordDetail(Record record, string token);
         void DeleteRecord(string recordId, string token);
-        List<Record> SearchRecords(string token, RecordFilter filter, string fields, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1);
+        ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields, int offset = -1, int limit = -1);
 
         // Related Records
         List<Record> GetRelatedRecords(string recordId, string token);
@@ -26,8 +26,8 @@ namespace Accela.Web.SDK
         List<RecordFees> GetRecordFees(string recordId, string token);
 
         // Record Contacts
-        List<Contact> GetRecordContacts(string recordId, string token, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1);
-        List<Contact> SearchRecordContacts(string token, string filter, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1);
+        ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, int offset = -1, int limit = -1);
+        ResultDataPaged<Contact> SearchRecordContacts(string token, string filter, int offset = -1, int limit = -1);
         List<ContactType> GetContactTypes(string token);
         Result CreateRecordContact(List<Contact> contacts, string recordId, string token);
         Contact UpdateRecordContact(Contact contact, string recordId, string token);

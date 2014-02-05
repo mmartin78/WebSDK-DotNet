@@ -70,7 +70,7 @@ namespace Accela.Web.SDK
             HttpContext.Current.Response.Redirect(GetAuthUrlForRedirect(agencyName, agencyEnvironment, redirectUrl, scope));
         }
 
-        public CurrentUserProfile GetCurrentUserProfile(string redirectUrl)
+        public CurrentUserProfile GetTokenAndCurrentUserProfile(string redirectUrl)
         {
             // Validate
             if (string.IsNullOrEmpty(redirectUrl))

@@ -114,7 +114,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public List<Record> SearchRecords(string token, RecordFilter filter, string fields, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
+        public ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields, int offset = -1, int limit = -1)
         {
             try
             {
@@ -128,11 +128,13 @@ namespace Accela.Web.SDK
                    url.Append("&fields=").Append(fields);
 
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
+                PaginationInfo paginationInfo = null;
 
                 // create response
                 List<Record> records = new List<Record>();
                 records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
-                return records;
+                ResultDataPaged<Record> results = new ResultDataPaged<Record> { Data = records, PageInfo = paginationInfo };
+                return results;
             }
             catch (WebException webException)
             {
@@ -144,7 +146,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public List<Record> GetRecords(string token, string filter, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
+        public ResultDataPaged<Record> GetRecords(string token, string filter, int offset = -1, int limit = -1)
         {
             try
             {
@@ -166,11 +168,13 @@ namespace Accela.Web.SDK
 
                 // get records
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
+                PaginationInfo paginationInfo = null;
 
                 // create response
                 List<Record> records = new List<Record>();
                 records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
-                return records;
+                ResultDataPaged<Record> results = new ResultDataPaged<Record> { Data = records, PageInfo = paginationInfo };
+                return results;
             }
             catch (WebException webException)
             {
@@ -182,12 +186,12 @@ namespace Accela.Web.SDK
             }
         }
 
-        public RecordId CreateRecordFinalize(Record record, string token) // Doesn't work
+        public RecordId CreateRecordFinalize(Record record, string token) 
         {
             return CreateRecordInternal(record, token, "final");
         }
 
-        public RecordId CreateRecordInitialize(Record record, string token) // Doesn't work bug raised
+        public RecordId CreateRecordInitialize(Record record, string token)
         {
             return CreateRecordInternal(record, token, "initial");
         }
@@ -228,7 +232,7 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Contacts
-        public List<Contact> SearchRecordContacts(string token, string filter, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1) // TODO
+        public ResultDataPaged<Contact> SearchRecordContacts(string token, string filter, int offset = -1, int limit = -1) // TODO
         { 
             try
             {
@@ -245,10 +249,12 @@ namespace Accela.Web.SDK
                 // get contacts
                 List<Contact> responseGetRecordContacts = new List<Contact>();
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
+                PaginationInfo paginationInfo = null;
 
                 // create response
-                responseGetRecordContacts = (List<Contact>)HttpHelper.ConvertToSDKResponse(responseGetRecordContacts, response);
-                return responseGetRecordContacts;
+                responseGetRecordContacts = (List<Contact>)HttpHelper.ConvertToSDKResponse(responseGetRecordContacts, response, ref paginationInfo);
+                ResultDataPaged<Contact> results = new ResultDataPaged<Contact> { Data = responseGetRecordContacts, PageInfo = paginationInfo };
+                return results;
             }
             catch (WebException webException)
             {
@@ -286,7 +292,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public List<Contact> GetRecordContacts(string recordId, string token, ref PaginationInfo paginationInfo, int offset = -1, int limit = -1)
+        public ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, int offset = -1, int limit = -1)
         {
             try
             {
@@ -300,10 +306,13 @@ namespace Accela.Web.SDK
                 // get contacts
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                PaginationInfo paginationInfo = null;
 
                 // create response
                 List<Contact> contacts = new List<Contact>();
-                return (List<Contact>)HttpHelper.ConvertToSDKResponse(contacts, response);
+                contacts = (List<Contact>)HttpHelper.ConvertToSDKResponse(contacts, response);
+                ResultDataPaged<Contact> results = new ResultDataPaged<Contact> { Data = contacts, PageInfo = paginationInfo };
+                return results;
             }
             catch (WebException webException)
             {

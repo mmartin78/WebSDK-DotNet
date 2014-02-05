@@ -199,22 +199,7 @@ namespace Accela.Web.SDK.Models
             }
             else
             {
-                // Licenses-Animal-Dog-Application
-                string[] recordTypeAttributes = this.type.id.Split('-');
-                if (recordTypeAttributes != null && recordTypeAttributes.Length == 4)
-                {
-                    if (string.IsNullOrEmpty(this.type.group) && !string.IsNullOrEmpty(recordTypeAttributes[0]))
-                    {
-                        this.type.group = recordTypeAttributes[0];
-                        this.type.module = recordTypeAttributes[0];
-                    }
-                    if (string.IsNullOrEmpty(this.type.type) && !string.IsNullOrEmpty(recordTypeAttributes[1]))
-                        this.type.type = recordTypeAttributes[1];
-                    if (string.IsNullOrEmpty(this.type.subType) && !string.IsNullOrEmpty(recordTypeAttributes[2]))
-                        this.type.subType = recordTypeAttributes[2];
-                    if (string.IsNullOrEmpty(this.type.category) && !string.IsNullOrEmpty(recordTypeAttributes[3]))
-                        this.type.category = recordTypeAttributes[3];
-                }
+                this.type = RequestValidator.BuildRecordTypeFromTypeId(this.type, this.type.id);
             }
         }
     }
