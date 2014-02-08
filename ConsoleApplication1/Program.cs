@@ -62,18 +62,22 @@ namespace ConsoleApplication1
             //rec.CreateRecordDocument(@"C:\Swapnali\TestPurposes\Accela.doc", "test document", recordId, token);
             //List<Dictionary<string, string>> s = rec.GetRecordCustomFields(recordId, token);
             //rec.UpdateRecordCustomFields(recordId, s, token);
-            List<Record> records = rec.GetRecords(token, filter, ref p, -1, 50);
+            
+            
+            ////List<Record> records = rec.GetRecords(token, filter, ref p, -1, 50);
 
-            records = rec.SearchRecords(token, new RecordFilter { module = "Licenses" }, null, ref p);
-            //Agency agency = a.GetAgency(token, "BPTMSTR");
-            //a.GetAgencyLogo(@"c:\swapnali\", token, "BPTMSTR");
-            record = rec.GetRecord(recordId, token);
-            //rec.UpdateRecordDetail(record, token);
-            List<Document> docs = rec.GetRecordDocuments(recordId, token);
-            List<Contact> contacts = rec.GetRecordContacts(recordId, token, ref p);
+            ////records = rec.SearchRecords(token, new RecordFilter { module = "Licenses" }, null, ref p);
+            //////Agency agency = a.GetAgency(token, "BPTMSTR");
+            //////a.GetAgencyLogo(@"c:\swapnali\", token, "BPTMSTR");
+            ////record = rec.GetRecord(recordId, token);
+            //////rec.UpdateRecordDetail(record, token);
+            ////List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            ////List<Contact> contacts = rec.GetRecordContacts(recordId, token, ref p);
 
-            record = new Record { type = new RecordType { id = "Licenses-Animal-Dog-Application" } };
-            record.contacts = contacts;
+            ////record = new Record { type = new RecordType { id = "Licenses-Animal-Dog-Application" } };
+            ////record.contacts = contacts;
+
+
             //record = rec.GetRecord(rId, token);
             //RecordId r1 = rec.CreateRecordInitialize(record, token);
             //record = rec.GetRecord(r1.id, token);
