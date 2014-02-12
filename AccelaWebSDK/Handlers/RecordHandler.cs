@@ -15,7 +15,7 @@ namespace Accela.Web.SDK
 {
     public class RecordHandler : BaseHandler, IRecord
     {
-        public RecordHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { } 
+        public RecordHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
 
         #region Related Records
         public List<Record> GetRelatedRecords(string recordId, string token)
@@ -125,7 +125,7 @@ namespace Accela.Web.SDK
                 StringBuilder url = new StringBuilder(apiUrl);
                 url = url.Append(ConfigurationReader.GetValue("SearchRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                 if (!string.IsNullOrEmpty(fields))
-                   url.Append("&fields=").Append(fields);
+                    url.Append("&fields=").Append(fields);
 
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
                 PaginationInfo paginationInfo = null;
@@ -157,9 +157,9 @@ namespace Accela.Web.SDK
                 StringBuilder url = new StringBuilder(apiUrl);
                 if (this.appType == ApplicationType.Agency)
                 {
-                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
+                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                     if (!string.IsNullOrEmpty(filter))
-                       url.Append("&").Append(filter);
+                        url.Append("&").Append(filter);
                 }
                 else if (this.appType == ApplicationType.Citizen)
                 {
@@ -186,7 +186,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public RecordId CreateRecordFinalize(Record record, string token) 
+        public RecordId CreateRecordFinalize(Record record, string token)
         {
             return CreateRecordInternal(record, token, "final");
         }
@@ -233,7 +233,7 @@ namespace Accela.Web.SDK
 
         #region Record Contacts
         public ResultDataPaged<Contact> SearchRecordContacts(string token, string filter, int offset = -1, int limit = -1) // TODO
-        { 
+        {
             try
             {
                 // Validate
@@ -304,7 +304,7 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get contacts
-                string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
                 PaginationInfo paginationInfo = null;
 
@@ -334,8 +334,8 @@ namespace Accela.Web.SDK
                 if (String.IsNullOrWhiteSpace(recordId))
                 {
                     throw new Exception("Null Record Id provided");
-                } 
-               
+                }
+
 
                 // Update 
                 string url = apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("recordId", recordId);
@@ -388,7 +388,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void DeleteRecordContact(string contactId, string recordId, string token) 
+        public void DeleteRecordContact(string contactId, string recordId, string token)
         {
             try
             {
@@ -438,7 +438,7 @@ namespace Accela.Web.SDK
                 // create response
                 List<Dictionary<string, string>> customFieldList = new List<Dictionary<string, string>>();
                 customFieldList = (List<Dictionary<string, string>>)HttpHelper.ConvertToSDKResponse(customFieldList, response);
-                return customFieldList; 
+                return customFieldList;
             }
             catch (WebException webException)
             {
@@ -493,14 +493,13 @@ namespace Accela.Web.SDK
                 }
                 RequestValidator.ValidateToken(token);
 
-
                 // update Custom Fields
                 string url = apiUrl + ConfigurationReader.GetValue("UpdateRecordCustomFields").Replace("{recordId}", recordId);
                 RESTResponse response = HttpHelper.SendPutRequest(url, customFieldList, token, this.appId);
 
                 // create response
                 customFieldList = (List<Dictionary<string, string>>)HttpHelper.ConvertToSDKResponse(customFieldList, response);
-                return customFieldList; 
+                return customFieldList;
 
             }
             catch (WebException webException)
@@ -533,7 +532,7 @@ namespace Accela.Web.SDK
                 // create response
                 List<Document> docList = new List<Document>();
                 docList = (List<Document>)HttpHelper.ConvertToSDKResponse(docList, response);
-                return docList; 
+                return docList;
             }
             catch (WebException webException)
             {
@@ -545,7 +544,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public Document CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token) // TODO does not work
+        public void CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token) // TODO does not work
         {
             try
             {
@@ -561,12 +560,12 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 string url = apiUrl + ConfigurationReader.GetValue("CreateRecordDocument").Replace("{recordId}", recordId);
-                RESTResponse response = HttpHelper.SendUploadRequest(documentPath, documentDescription, url, token, appId);
+                HttpHelper.SendUploadRequest(documentPath, documentDescription, url, token, appId);
 
                 // create response
-                Document doc = new Document();
-                doc = (Document)HttpHelper.ConvertToSDKResponse(doc, response);
-                return doc;
+                //Document doc = new Document();
+                //doc = (Document)HttpHelper.ConvertToSDKResponse(doc, response);
+                //return doc;
             }
             catch (WebException webException)
             {
@@ -631,6 +630,174 @@ namespace Accela.Web.SDK
             catch (Exception exception)
             {
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Delete Record Documents :"));
+            }
+        }
+
+        public List<DocumentType> GetRecordDocumentTypes(string recordId, string token)
+        {
+            try
+            {
+                // Validate
+                RequestValidator.ValidateToken(token);
+
+                // get document types 
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordDocumentTypes").Replace("{recordId}", recordId);
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                List<DocumentType> docTypes = new List<DocumentType>();
+                docTypes = (List<DocumentType>)HttpHelper.ConvertToSDKResponse(docTypes, response);
+                return docTypes;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Document Types :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Document Types :"));
+            }
+        }
+
+        #endregion
+
+        # region Record Workflows
+        public List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false)
+        {
+            try
+            {
+                // validate
+                if (String.IsNullOrWhiteSpace(recordId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+                RequestValidator.ValidateToken(token);
+
+                // get workflow tasks
+                string url = apiUrl + ConfigurationReader.GetValue("GetWorkflowTasks").Replace("{recordId}", recordId);
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                List<WorkflowTask> workflowTasks = new List<WorkflowTask>();
+                workflowTasks = (List<WorkflowTask>)HttpHelper.ConvertToSDKResponse(workflowTasks, response);
+
+                if (workflowTasks != null)
+                {
+                    if (returnActiveOnly)
+                    {
+                        var activeTask = workflowTasks.Where(w => w.isActive.Equals("true")).Select(w => w).SingleOrDefault();
+                        if (activeTask == null)
+                            return null;
+                        return new List<WorkflowTask> { activeTask };
+                    }
+                    else
+                        return workflowTasks;
+                }
+                return null;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Workflow tasks :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Workflow tasks :"));
+            }
+        }
+
+        public WorkflowTask GetWorkflowTask(string recordId, string taskId, string token)
+        {
+            try
+            {
+                // validate
+                if (String.IsNullOrWhiteSpace(recordId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+                if (String.IsNullOrWhiteSpace(taskId))
+                {
+                    throw new Exception("Null task Id provided");
+                }
+                RequestValidator.ValidateToken(token);
+
+                // get workflow tasks
+                string url = apiUrl + ConfigurationReader.GetValue("GetWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId);
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                WorkflowTask workflowTask = new WorkflowTask();
+                workflowTask = (WorkflowTask)HttpHelper.ConvertToSDKResponse(workflowTask, response);
+                return workflowTask;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Workflow tasks :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Workflow tasks :"));
+            }
+        }
+
+        public WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token)
+        {
+            try
+            {
+                // Validate
+                if (String.IsNullOrWhiteSpace(recordId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+                if (workflowTask == null)
+                {
+                    throw new Exception("Null Workflow task provided");
+                }
+                RequestValidator.ValidateToken(token);
+
+                // update workflow task
+                string url = apiUrl + ConfigurationReader.GetValue("UpdateWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId);
+                RESTResponse response = HttpHelper.SendPutRequest(url, workflowTask, token, appId);
+
+                // create response
+                WorkflowTask updatedTask = new WorkflowTask();
+                updatedTask = (WorkflowTask)HttpHelper.ConvertToSDKResponse(updatedTask, response);
+                return updatedTask;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Workflow tasks :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Workflow tasks :"));
+            }
+        }
+        #endregion
+
+        #region Record Status
+        public List<Status> GetRecordStatuses(string recordTypeId, string token)
+        {
+            try
+            {
+                // Validate
+                RequestValidator.ValidateToken(token);
+
+                // get recrd status 
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordStatuses").Replace("{id}", recordTypeId);
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                List<Status> statuses = new List<Status>();
+                statuses = (List<Status>)HttpHelper.ConvertToSDKResponse(statuses, response);
+                return statuses;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Status :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Status :"));
             }
         }
         #endregion

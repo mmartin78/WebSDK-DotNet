@@ -35,9 +35,10 @@ namespace Accela.Web.SDK
 
         // Record Documents
         List<Document> GetRecordDocuments(string recordId, string token);
-        Document CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token);
+        void CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token);
         void DeleteRecordDocuments(string recordId, string token);
         void DeleteRecordDocument(string documentId, string recordId, string token);
+        List<DocumentType> GetRecordDocumentTypes(string recordId, string token);
 
         // Record Custom Fields
         // Response DescribeRecordCustomFields(string recordTypeId, string token);
@@ -45,7 +46,11 @@ namespace Accela.Web.SDK
         List<Dictionary<string, string>> UpdateRecordCustomFields(string recordId, List<Dictionary<string, string>> customFieldList, string token);
 
         // Record Workflows
-        //Response GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false);
-        //void UpdateWorkflowTask(string recordId, WorkflowTask workflowTask, string token);
+        List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false);
+        WorkflowTask GetWorkflowTask(string recordId, string taskId, string token);
+        WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token);
+
+        // Record Status
+        List<Status> GetRecordStatuses(string recordTypeId, string token);
     }
 }

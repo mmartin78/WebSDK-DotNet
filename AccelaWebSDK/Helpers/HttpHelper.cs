@@ -58,48 +58,35 @@ namespace Accela.Web.SDK
             return response;
         }
 
-        public static RESTResponse SendUploadRequest(string documentPath, string description, string url, string token, string appId)
+        public static void SendUploadRequest(string documentPath, string description, string url, string token, string appId)
         {
-            // Prepare Request
-            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpRequest.Method = "POST";
-            httpRequest.ContentType = "multipart/form-data";
-            httpRequest.Accept = accept;
-            httpRequest.Headers.Add(appIdHeader, appId);
-            httpRequest.Headers.Add("Authorization", token);
-
-            //using (FileStream fileStream = new FileStream(documentPath, FileMode.Open))
-            //{
-            //    webRequest.ContentLength = fileStream.Length;
-            //    byte[] data = new byte[fileStream.Length];
-            //    int bytesRead = fileStream.Read(data, 0, (int)fileStream.Length);
-            //    Stream requestStream = webRequest.GetRequestStream();
-            //    requestStream.Write(data, 0, (int)fileStream.Length);
-            //}
-
-            // Send
             using (var client = new HttpClient())
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    var fileContent = new ByteArrayContent(System.IO.File.ReadAllBytes(documentPath));
-                    content.Add(new StringContent(GetFileInfo(documentPath, description)), "fileInfo");
-                    content.Add(fileContent, "uploadedFile");
+                    FileInfo file = null;
 
-                    using (StreamWriter s = new StreamWriter(httpRequest.GetRequestStream()))
+                    file = new FileInfo(documentPath);
+                    if (file != null)
                     {
-                        s.Write(content);
-                        s.Flush();
+                        StreamContent fileContent = new StreamContent(file.OpenRead());
+                        content.Add(fileContent, "\"file\"", "\"" + file.Name + "\"");
+                        content.Add(new StringContent(GetFileInfo(documentPath, description)), "\"fileInfo\"");
+
+                        client.DefaultRequestHeaders.Add(appIdHeader, appId);
+                        client.DefaultRequestHeaders.Add("Accept", "application/json");
+                        client.DefaultRequestHeaders.Add("Authorization", token);
+
+                        client.PostAsync(url, content);
                     }
                 }
             }
-            return ReceiveRESTResponse(httpRequest);
         }
 
         public static RESTResponse SendPostRequest(string url, Object request, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "POST", appId, token);
-            string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request);
+            string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
 
             // Send
             using (StreamWriter s = new StreamWriter(httpRequest.GetRequestStream()))
@@ -202,7 +189,8 @@ namespace Accela.Web.SDK
             if (fileInfo != null)
             {
                 str.Replace("{fileName}", fileInfo.Name);
-                str.Replace("{fileType}", fileInfo.Extension.Replace('.', ' '));
+                str.Replace("{fileType}", "image/jpeg");
+                //str.Replace("{fileType}", fileInfo.Extension.Replace('.', ' '));
                 str.Replace("{description}", description);
             }
             return str.ToString();
@@ -236,7 +224,7 @@ namespace Accela.Web.SDK
                     {
                         string message = string.Format("Request Failed with Code {0} and Error {1} ", response.Code, response.Message);
                         throw new Exception(message);
-                    } 
+                    }
                     else if (response.Status == 200 && response.Result != null && response.Result.ToString().Contains("failedCount"))
                     {
                         Result result = new Result();

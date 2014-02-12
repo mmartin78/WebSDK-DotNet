@@ -38,20 +38,52 @@ namespace ConsoleApplication1
             string recordId = "BPTMSTR-DUB13-00000-00005";
             string documentId = "DUB13-00000-00005-401";
             string rId = "BPTMSTR-14EST-00000-00017";
+            string taskId = "3-12713";
 
-            string token = "ha4BkHZp7RML_70ZN84ijzic4zHmVnIGWIiuQ9vVtbirnW7VahYCSqZQ6An8CRcP3Ar6zPn8NBWYT7PfiZrKcqvEqjmMi-Yso56sZ4Cno4HG9TuBzwGIZgt93TV5k_IFG9F8ToLStFZL9ex1cJKf5Q6Gq17Qqw1zEl2zxO6xqLaoqUjripltsT_0qXKVKnvBorAsXIy34doouBhSEQ1KjyhZxAAtemc92vb94rZptStnaCPDJKNr4WnvuQwCAYXMf44cVy0TKAkTGkklhWzFfpy8cfoZsdidPi96mPFzbl8SbIIK0Kb2K0xfvYdIM2ugZVLLQbwHitL8v8TipBjDDKG2IRCUoI3TD8lUfXO52xYbVRWkQy_Z5GVCOfKrntPlFHOLdMByxOjmI4RQX1mtaMG3mBlZbpRNnSqrblvc9GhY7vRocJyS1yjTigZV56wHPkuhAVyvsdLs2CY5A798Foth2ewLesscNMnvMeEe9SfCEa7dZKqIdz1Q3yBQJz28-kn6OPS3OTKId31Qyx8fRBZPQscXpjcv_5hIxgu0gVkEdY-f5uXQ7rFkQ9QoNBDr0";
-            // citizen string token = "gKUREWXm1DkIMO702NZNS-NtaZpVJpA4lKcewZD3CCvtAa9bN2k4_0CdzSTKaFkFJKzXiJihvNFJ8oPAgWLfbM-WGsprx5ZnB-UQYt6v3fzbrnpaAdlTDWoX9s3FElNpO5f79aBoKYpvkozYL3PpvniKFj2SL181PDqAH77di4nOX5F9q1N3UTCfVLyKUBYANfyPVDByYukHdCDhG_6DLlB9vc_kw2gwB4EQKHGMkCAyywTSA6nwBXwvmCh064tc_36bms6l_7aemoe0tH9xVUsy61VLQcw0gHcf723Ru2yb-lfZEA6WK4z7UnpGUQoD50HxSEduSx5hOmsVQCdCuheZ0JjlXE44ln3xAq6ZxlhQvzIxleIOA8Mq2tVE3pSNz9727QZiiSPATkNYYve0lYKTwdCS9qsk6IkjOgiaxRQxfQLR4vzXkyXqDElp5RKcKqLca64jap70EmDtgkXtAsOZw1NPDesjB214VObov90yDAAKSqMkpJrT1CqhggHaXnCmDj--BqOXt1z-QwTb3g2";
+            string token = "Fa7nMwQB-ScOc5-kUqoL-QXBpDs0FRyaSg5DDeW8S0GIl1e3v2tmvNRT0DBUv4vgTWW4F57po4_G6yIGEvj7-aK4mYLAYb6fAXFypDQJ7v39r8kV4tIB7fBKmDUtbOeSTzRBz34splSuZbdeSF5WFzrU1UsKKzi5CJ8PKw0-Nvnl3cjq0scdaEKW-qadK0owJgTIdiLfx0kbh7ePn74S-UcUHtTIDd3DOdVr-LWkFUEP8hmF8QB6TbC2G4pXzK1ePGE-ChFVoh7zUc6Kv-LaZNP4bcR6H3Ku-7eSKa1JxCqEpoaxfgbDhjnDuXQgFdlckFNNPKhASaB4IFoQrNrmO4iTqGhqQijGgTFfC1lOiHue5H5hvuyRobwX48N_M-765RMN_7U9rP-LJ7NfYRV58Z9SzJVFPJ3lCjP-ARQYh1VcrNEv4NQC_S_K1tC-a5P1u2qZacOcPOhb9RygyykeIIByHOMhIxhHLmgBYZZboBUqxMVYsjxgWvXNAFvVWjvyhptReEZEYRh_9KcbKskb6TPRUB0_IPwBlQFN-BMB8sc1";
 
-            IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
-            IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
-            IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
+            //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
+            //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
+            //IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
 
+            IRecord rec = new RecordHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            IDocument doc = new DocumentHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            IAgency a = new AgencyHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+            IAddress ad = new AddressHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
+
+            List<Country> c = ad.GetCountries(token);
+            ResultDataPaged<Record> records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "License" } }, null);
+            doc.DownloadDocument("C:\\Swapnali\\TestPurposes\\test.jpeg", "401", token);
+            List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            rec.CreateRecordDocument(@"C:\Swapnali\TestPurposes\Ducky.jpeg", "test document", recordId, token);
+
+
+            List<Contact> cs = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
+            rec.CreateRecordContact(cs, recordId, token);
+            ResultDataPaged<Contact> contacts = rec.GetRecordContacts(recordId, token);
+            cs = contacts.Data as List<Contact>;
+            cs[0].middleName = "tseting";
+            cs[0] = rec.UpdateRecordContact(cs[0], recordId, token);
+            contacts = rec.GetRecordContacts(recordId, token);
+
+            //List<ContactType> ct = rec.GetContactTypes(token);
+            //List<DocumentType> d = rec.GetRecordDocumentTypes(recordId, token);
+            //List<Status> s = rec.GetRecordStatuses("Licenses-Animal-Pig-Application", token);
+            //List<Country> c = ad.GetCountries(token);
+            //List<State> st = ad.GetStates(token);
+            //ResultDataPaged<Record> records = rec.GetRecords(token, filter);
+            //List<WorkflowTask> w1 = rec.GetWorkflowTasks("BPTMSTR-DUB14-00000-0001Y", token);
+            //List<WorkflowTask> w2 = rec.GetWorkflowTasks(recordId, token, true);
+            //WorkflowTask w = rec.GetWorkflowTask(recordId, taskId, token);
+
+            //UpdateWorkflowTaskRequest uw = new UpdateWorkflowTaskRequest { comment = "testing", status = new Status { value = "About to Expire" } };
+            //w = rec.UpdateWorkflowTask("BPTMSTR-DUB14-00000-0001Y", "1-12714", uw, token);
 
             //Record record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
             //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" }}};
             //RecordId r1 = rec.CreateRecordInitialize(record, token);
-            Record record = rec.GetRecord("BPTMSTR-14EST-00000-00032", token);
-            record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
+            Record record = rec.GetRecord(recordId, token);
+            record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
             RecordId r2 = rec.CreateRecordFinalize(record, token);
 
             //IRecord rec = new RecordHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);

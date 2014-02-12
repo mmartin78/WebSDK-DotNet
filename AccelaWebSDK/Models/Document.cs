@@ -63,4 +63,21 @@ namespace Accela.Web.SDK.Models
         public double size { get; set; }
     }
 
+    public class Group
+    {
+        public string text { get; set; }
+        public string value { get; set; }
+    }
+
+    public class DocumentType
+    {
+        public bool viewable { get; set; }
+        public Group group { get; set; }
+        public string text { get; set; }
+        public string value { get; set; }
+        public bool uploadable { get; set; }
+        public bool downloadable { get; set; }
+        public bool deletable { get; set; }
+        public string id { get; set; }
+    }
 }
