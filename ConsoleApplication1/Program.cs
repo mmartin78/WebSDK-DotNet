@@ -11,8 +11,8 @@ using System.Net.Http;
 
 namespace ConsoleApplication1
 {
-    // Create/Update/Get Contact
-    // Search Contact
+    // Create/Update/Get/delete Contact
+    // Update custom attributes
     // Update Record Detail
     // download doc
 
@@ -47,17 +47,19 @@ namespace ConsoleApplication1
 
             // Contact
             //List<ContactType> ct = con.GetContactTypes(token, "Licenses");
-            //ResultDataPaged<Contact> cts = con.SearchContacts(token, new ContactFilter { lastName = "Dembla" }); - doesn't work
+           // ResultDataPaged<Contact> cts = con.SearchContacts(token, new ContactFilter { lastName = "Turman" });
 
             //// Agency
             //Agency ag = a.GetAgency(token, "BPTMSTR");
             //AttachmentInfo att = a.GetAgencyLogo(token, "BPTMSTR"); // 404 Not found
 
             // Record Contact
+            //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(rId, token);
             //List<Contact> cs = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
             //rec.CreateRecordContact(cs, rId, token);
-            //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(rId, token);
+            //contacts = rec.GetRecordContacts(rId, token);
             //Contact c = ((List<Contact>)contacts.Data)[0];
+            //rec.DeleteRecordContact(c.id, recordId, token);
             //c.middleName = "tseting";
             //c = rec.UpdateRecordContact(c, rId, token);
             //contacts = rec.GetRecordContacts(recordId, token);
@@ -67,9 +69,9 @@ namespace ConsoleApplication1
             //List<State> s = ad.GetStates(token);
 
             // Records
-            Record record = rec.GetRecord(recordId, token);
-            record.name = "Test Test";
-            record = rec.UpdateRecordDetail(record, token);
+            //Record record = rec.GetRecord(recordId, token);
+            //record.name = "Test Test";
+            //record = rec.UpdateRecordDetail(record, token);
             //ResultDataPaged<Record> records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "License" } }, null);
             //records = rec.GetRecords(token, null);
             //Record record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
@@ -84,15 +86,15 @@ namespace ConsoleApplication1
             //List<Document> docs = rec.GetRecordDocuments(recordId, token);
             //doc.DownloadDocument("401", token);
 
-            FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
-            if (file != null)
-            {
-                AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
-                at.FileContent = new StreamContent(file.OpenRead());
-                rec.CreateRecordDocument(at, recordId, token, "ooo");
-            }
-            List<Document> docs = rec.GetRecordDocuments(recordId, token);
-            rec.DeleteRecordDocument("745", recordId, token);
+            //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
+            //if (file != null)
+            //{
+            //    AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
+            //    at.FileContent = new StreamContent(file.OpenRead());
+            //    rec.CreateRecordDocument(at, recordId, token, "ooo");
+            //}
+            //rec.DeleteRecordDocument("746", recordId, token);
+            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
 
             // Status
             //List<Status> s = rec.GetRecordStatuses("Licenses-Animal-Pig-Application", token);

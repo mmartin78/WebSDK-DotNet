@@ -14,7 +14,7 @@ namespace Accela.Web.SDK
 
          public ContactHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { }
 
-         public ResultDataPaged<Contact> SearchContacts(string token, ContactFilter filter, int offset = -1, int limit = -1) // TODO doesn't work
+         public ResultDataPaged<Contact> SearchContacts(string token, ContactFilter filter, int offset = -1, int limit = -1)
          {
              try
              {
@@ -25,8 +25,7 @@ namespace Accela.Web.SDK
                  if (this.language != null)
                      url.Append("&lang=").Append(this.language);
 
-                 List<ContactFilter> filters = new List<ContactFilter> { filter };
-                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filters, token, this.appId);
+                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
                  PaginationInfo paginationInfo = null;
 
                  // create response

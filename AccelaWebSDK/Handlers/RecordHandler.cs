@@ -229,7 +229,7 @@ namespace Accela.Web.SDK
             return CreateRecordInternal(record, token, "", null);
         }
 
-        public Record UpdateRecordDetail(Record record, string token) // TODO Doesn't work 400 
+        public Record UpdateRecordDetail(Record record, string token) 
         {
             try
             {
@@ -404,7 +404,7 @@ namespace Accela.Web.SDK
                 }
 
                 // Update 
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contactId));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DeleteRecordContact").Replace("{recordId}", recordId).Replace("{ids}", contactId));
                 if (this.language != null || fields != null)
                     url.Append("?");
                 if (this.language != null)
@@ -415,7 +415,6 @@ namespace Accela.Web.SDK
                     url.Append("fields=").Append(fields);
 
                 RESTResponse response = HttpHelper.SendDeleteRequest(url.ToString(), token, appId);
-                HttpHelper.ConvertToSDKResponse(null, response);
             }
             catch (WebException webException)
             {
@@ -587,7 +586,7 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // delete document
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DeleteRecordDocuments").Replace("{recordIds}", recordId).Replace("{documentId}", documentId));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DeleteRecordDocument").Replace("{recordId}", recordId).Replace("{documentIds}", documentId));
                 if (this.language != null || password != null || userId != null)
                     url.Append("?");
                 if (this.language != null)
@@ -599,7 +598,6 @@ namespace Accela.Web.SDK
                 url = url.Replace("&", "", url.Length-1, 1);
 
                 RESTResponse response = HttpHelper.SendDeleteRequest(url.ToString(), token, this.appId);
-                HttpHelper.ConvertToSDKResponse(null, response);
             }
             catch (WebException webException)
             {

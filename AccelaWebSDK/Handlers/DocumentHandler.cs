@@ -57,7 +57,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public AttachmentInfo DownloadDocument(string documentId, string token, string password = null, string userId = null) // TODO 
+        public AttachmentInfo DownloadDocument(string documentId, string token, string password = null, string userId = null) 
         {
             try
             {
