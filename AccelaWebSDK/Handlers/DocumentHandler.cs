@@ -15,7 +15,9 @@ namespace Accela.Web.SDK
     {
         public DocumentHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
 
-        public Document GetDocument(string documentId, string token) // TODO
+        public DocumentHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+
+        public Document GetDocument(string documentId, string token, string fields = null) 
         {
             try
             {
@@ -27,8 +29,16 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get document
-                string url = apiUrl + ConfigurationReader.GetValue("GetDocument").Replace("{documentIds}", documentId);
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetDocument").Replace("{documentIds}", documentId));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
                 List<Document> doc = new List<Document>();
@@ -47,10 +57,8 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void DownloadDocument(string filePath, string documentId, string token) // TODO 
+        public AttachmentInfo DownloadDocument(string documentId, string token, string password = null, string userId = null) // TODO 
         {
-            MemoryStream memoryStream = null;
-            FileStream fileStream = null;
             try
             {
                 // Validate
@@ -58,17 +66,23 @@ namespace Accela.Web.SDK
                 {
                     throw new Exception("Null Document Id provided");
                 }
-                if (String.IsNullOrWhiteSpace(filePath))
-                {
-                    throw new Exception("Null File Path provided");
-                }
                 RequestValidator.ValidateToken(token);
 
                 // download document
-                string url = apiUrl + ConfigurationReader.GetValue("DownloadDocument").Replace("{documentId}", documentId);
-                memoryStream = HttpHelper.SendDownloadRequest(url, memoryStream, token, this.appId);
-                fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-                memoryStream.WriteTo(fileStream);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DownloadDocument").Replace("{documentId}", documentId));
+                if (this.language != null || password != null || userId != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (userId != null)
+                    url.Append("userId=").Append(userId).Append("&");
+                if (password != null)
+                    url.Append("password=").Append(password).Append("&");
+                url = url.Replace("&", "", url.Length-1, 1) ;
+
+                AttachmentInfo attachmentInfo = null;
+                attachmentInfo = HttpHelper.SendDownloadRequest(url.ToString(), attachmentInfo, token, this.appId);
+                return attachmentInfo;
             }
             catch (WebException webException)
             {
@@ -77,13 +91,6 @@ namespace Accela.Web.SDK
             catch (Exception exception)
             {
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Download Record Document :"));
-            }
-            finally
-            {
-                if (fileStream != null)
-                    fileStream.Close();
-                if (memoryStream != null)
-                    memoryStream.Close();
             }
         }
     }

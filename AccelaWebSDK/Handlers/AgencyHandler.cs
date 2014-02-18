@@ -16,6 +16,8 @@ namespace Accela.Web.SDK
     {
         public AgencyHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
 
+        public AgencyHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+
         public Agency GetAgency(string token, string agencyName)
         {
             try
@@ -46,17 +48,11 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void GetAgencyLogo(string filePath, string token, string agencyName)
+        public AttachmentInfo GetAgencyLogo(string token, string agencyName)
         {
-            MemoryStream memoryStream = null;
-            FileStream fileStream = null;
             try
             {
                 // Validate
-                if (String.IsNullOrWhiteSpace(filePath))
-                {
-                    throw new Exception("Null File Path provided");
-                }
                 if (String.IsNullOrWhiteSpace(agencyName))
                 {
                     throw new Exception("Null Agency Name provided");
@@ -65,9 +61,9 @@ namespace Accela.Web.SDK
 
                 // get agency logo
                 string url = apiUrl + ConfigurationReader.GetValue("GetAgencyLogo").Replace("{name}", agencyName);
-                memoryStream = HttpHelper.SendDownloadRequest(url, memoryStream, token, this.appId);
-                fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-                memoryStream.WriteTo(fileStream);
+                AttachmentInfo attachmentInfo = null;
+                attachmentInfo = HttpHelper.SendDownloadRequest(url, attachmentInfo, token, this.appId);
+                return attachmentInfo;
             }
             catch (WebException webException)
             {
@@ -76,13 +72,6 @@ namespace Accela.Web.SDK
             catch (Exception exception)
             {
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Get Agency Logo :"));
-            }
-            finally
-            {
-                if (fileStream != null)
-                    fileStream.Close();
-                if (memoryStream != null)
-                    memoryStream.Close();
             }
         }
 

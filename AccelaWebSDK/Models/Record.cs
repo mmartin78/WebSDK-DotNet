@@ -71,6 +71,7 @@ namespace Accela.Web.SDK.Models
     {
         public string value { get; set; }
         public string text { get; set; }
+        public string group { get; set; }
     }
 
     public class RecordDetail
@@ -123,6 +124,15 @@ namespace Accela.Web.SDK.Models
     {      
     }
 
+    public class RelatedRecord
+    {
+        public string relationship { get; set; }
+        public string recordId { get; set; }
+        public string customId { get; set; }
+        public string serviceProveCode { get; set; }
+        public string type { get; set; }
+    }
+
     public class Record
     {
         public Status status { get; set; }
@@ -131,6 +141,11 @@ namespace Accela.Web.SDK.Models
         public double estimatedCostPerUnit { get; set; }
         public string enforceDepartment { get; set; }
         public string closedDate { get; set; }
+        public bool infraction { get; set; }
+        public bool misdemeanor { get; set; }
+        public bool publicOwned { get; set; }
+        public bool offenseWitnessed { get; set; }
+        public bool defendantSignature { get; set; }
         public string inspectorName { get; set; }
         public string module { get; set; }
         public string estimatedDueDate { get; set; }
@@ -138,6 +153,7 @@ namespace Accela.Web.SDK.Models
         public double costPerUnit { get; set; }
         public string reportedDate { get; set; }
         public double actualProductionUnit { get; set; }
+        public string completedDate { get; set; }
         public string appearanceDate { get; set; }
         public string id { get; set; }
         public List<Address> addresses { get; set; }

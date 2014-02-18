@@ -58,29 +58,43 @@ namespace Accela.Web.SDK
             return response;
         }
 
-        public static void SendUploadRequest(string documentPath, string description, string url, string token, string appId)
+        public static string SendUploadRequest(AttachmentInfo attachmentInfo, string url, string token, string appId)
         {
             using (var client = new HttpClient())
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    FileInfo file = null;
+                    //FileInfo file = null;
 
-                    file = new FileInfo(documentPath);
-                    if (file != null)
+                    //file = new FileInfo(documentPath);
+                    //if (file != null)
+                    //{
+                    //    StreamContent fileContent = new StreamContent(file.OpenRead());
+                    //    content.Add(fileContent, "\"file\"", "\"" + file.Name + "\"");
+                    //    content.Add(new StringContent(GetFileInfo(documentPath, description)), "\"fileInfo\"");
+
+                    //    client.DefaultRequestHeaders.Add(appIdHeader, appId);
+                    //    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    //    client.DefaultRequestHeaders.Add("Authorization", token);
+                    //    var result = client.PostAsync(url, content).Result;
+                    //    return (string)result.Content.ReadAsStringAsync().Result;
+                    //}
+
+                    if (attachmentInfo.FileContent != null)
                     {
-                        StreamContent fileContent = new StreamContent(file.OpenRead());
-                        content.Add(fileContent, "\"file\"", "\"" + file.Name + "\"");
-                        content.Add(new StringContent(GetFileInfo(documentPath, description)), "\"fileInfo\"");
+                        string fileInfo = GetFileInfo(attachmentInfo);
+                        content.Add(attachmentInfo.FileContent, "\"file\"", "\"" + attachmentInfo.FileName + "\"");
+                        content.Add(new StringContent(fileInfo), "\"fileInfo\"");
 
                         client.DefaultRequestHeaders.Add(appIdHeader, appId);
                         client.DefaultRequestHeaders.Add("Accept", "application/json");
                         client.DefaultRequestHeaders.Add("Authorization", token);
-
-                        client.PostAsync(url, content);
+                        var result = client.PostAsync(url, content).Result;
+                        return (string)result.Content.ReadAsStringAsync().Result;
                     }
                 }
             }
+            return null;
         }
 
         public static RESTResponse SendPostRequest(string url, Object request, string token, string appId)
@@ -97,32 +111,46 @@ namespace Accela.Web.SDK
             return ReceiveRESTResponse(httpRequest);
         }
 
-        public static MemoryStream SendDownloadRequest(string url, MemoryStream response, string token, string appId)
+        public static AttachmentInfo SendDownloadRequest(string url, AttachmentInfo attachmentInfo, string token, string appId)
         {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = "GET";
-            request.ContentType = "multipart/form-data";
-            request.Accept = accept;
-            request.Headers.Add(appIdHeader, appId);
-            request.Headers.Add("Authorization", token);
-            var httpResponse = (HttpWebResponse)request.GetResponse();
+            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            //request.Method = "GET";
+            //request.ContentType = contentType;
+            //request.Accept = accept;
+            //request.Headers.Add(appIdHeader, appId);
+            //request.Headers.Add("Authorization", token);
+            //var httpResponse = (HttpWebResponse)request.GetResponse();
 
             // Receive
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            //{
+            //    //attachmentInfo.FileContent = streamReader.BaseStream.;
+            //    attachmentInfo.FileType = httpResponse.Headers["Content-Type"];
+            //    if (httpResponse.Headers["Content-Disposition"] != null)
+            //    {
+            //        string[] tmp = httpResponse.Headers["Content-Disposition"].Split('"');
+            //        if (tmp != null && tmp.Length > 2)
+            //            attachmentInfo.FileName = tmp[1];
+            //    }
+            //}
+
+            using (var client = new HttpClient())
             {
-                string s = streamReader.ReadToEnd();
-                if (!string.IsNullOrEmpty(s))
-                {
-                    response = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(s));
-                }
+                client.DefaultRequestHeaders.Add(appIdHeader, appId);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                client.DefaultRequestHeaders.Add("ContentType", contentType);
+                var result = client.GetAsync(url);
+                //attachmentInfo.FileName
+                //attachmentInfo.FileContent = result.Result.Content["file"];
             }
-            return response;
+            return attachmentInfo;
         }
 
         public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
         {
             HttpWebRequest httpRequest = PrepareRequest(url, "PUT", appId, token);
-            string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request);
+            string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
 
             // Send
             using (StreamWriter s = new StreamWriter(httpRequest.GetRequestStream()))
@@ -182,17 +210,16 @@ namespace Accela.Web.SDK
         }
 
         #region private methods
-        private static string GetFileInfo(string documentPath, string description)
+        private static string GetFileInfo(AttachmentInfo attachmentInfo)
         {
-            StringBuilder str = new StringBuilder("[{ \"serviceProviderCode\": \"BPTMSTR\", \"fileName\": \"{fileName}\", \"type\": \"{fileType}\", \"description\": \"{description}\"}]");
-            FileInfo fileInfo = new FileInfo(documentPath);
-            if (fileInfo != null)
-            {
-                str.Replace("{fileName}", fileInfo.Name);
-                str.Replace("{fileType}", "image/jpeg");
-                //str.Replace("{fileType}", fileInfo.Extension.Replace('.', ' '));
-                str.Replace("{description}", description);
-            }
+            if (string.IsNullOrEmpty(attachmentInfo.ServiceProviderCode) || string.IsNullOrEmpty(attachmentInfo.FileName) || string.IsNullOrEmpty(attachmentInfo.FileType))
+                throw new Exception("Invalid attachment Info provided");
+
+            StringBuilder str = new StringBuilder("[{ \"serviceProviderCode\": \"{service}\", \"fileName\": \"{fileName}\", \"type\": \"{fileType}\", \"description\": \"{description}\"}]");
+            str.Replace("{service}", attachmentInfo.ServiceProviderCode);
+            str.Replace("{fileName}", attachmentInfo.FileName);
+            str.Replace("{fileType}", attachmentInfo.FileType);
+            str.Replace("{description}", attachmentInfo.Description);
             return str.ToString();
         }
 

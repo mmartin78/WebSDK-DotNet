@@ -11,7 +11,9 @@ namespace Accela.Web.SDK
 {
     public class AddressHandler : BaseHandler, IAddress
     {
-        public AddressHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { } 
+        public AddressHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
+
+        public AddressHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
 
         public List<Country> GetCountries(string token)
         {
@@ -22,6 +24,8 @@ namespace Accela.Web.SDK
 
                 // get country 
                 string url = apiUrl + ConfigurationReader.GetValue("GetCountries");
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -48,6 +52,8 @@ namespace Accela.Web.SDK
 
                 // get country 
                 string url = apiUrl + ConfigurationReader.GetValue("GetStates");
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response

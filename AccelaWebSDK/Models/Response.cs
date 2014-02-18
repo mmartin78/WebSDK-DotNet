@@ -40,6 +40,4 @@ namespace Accela.Web.SDK.Models
         public int successCount { get; set; }
         public List<string> successIDs { get; set; }
     }
-
-    public class Response {} // TODO Remove
 }

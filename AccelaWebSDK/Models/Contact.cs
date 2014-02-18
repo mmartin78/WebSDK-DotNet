@@ -53,6 +53,8 @@ namespace Accela.Web.SDK.Models
         public string addressLine1 { get; set; }
     }
 
+    public class ContactFilter : Contact { }
+
     public class Contact
     {
         public string comment { get; set; }

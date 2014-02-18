@@ -17,8 +17,10 @@ namespace Accela.Web.SDK
     {
         public RecordHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
 
+        public RecordHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+
         #region Related Records
-        public List<Record> GetRelatedRecords(string recordId, string token)
+        public List<RelatedRecord> GetRelatedRecords(string recordId, string token, string relationship = null, string fields = null)
         {
             try
             {
@@ -30,12 +32,22 @@ namespace Accela.Web.SDK
                 }
 
                 // get related record
-                string url = apiUrl + ConfigurationReader.GetValue("GetRelatedRecords").Replace("{recordId}", recordId);
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRelatedRecords").Replace("{recordId}", recordId));
+                if (this.language != null || relationship != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (relationship != null)
+                    url.Append("relationship=").Append(relationship).Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields).Append("&");
+                url = url.Replace("&", "", url.Length-1, 1);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
-                List<Record> records = new List<Record>();
-                records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response);
+                List<RelatedRecord> records = new List<RelatedRecord>();
+                records = (List<RelatedRecord>)HttpHelper.ConvertToSDKResponse(records, response);
                 return records;
             }
             catch (WebException webException)
@@ -50,7 +62,7 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Fees
-        public List<RecordFees> GetRecordFees(string recordId, string token) // TODO
+        public List<RecordFees> GetRecordFees(string recordId, string token, string fields = null, string status = null)
         {
             try
             {
@@ -62,8 +74,18 @@ namespace Accela.Web.SDK
                 }
 
                 // get related record
-                string url = apiUrl + ConfigurationReader.GetValue("GetRecordFees").Replace("{recordId}", recordId);
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRecordFees").Replace("{recordId}", recordId));
+                if (this.language != null || fields != null || status != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields).Append("&");
+                if (status != null)
+                    url.Append("status=").Append(status).Append("&");
+                url = url.Replace("&", "", url.Length-1, 1);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
                 List<RecordFees> recordFees = new List<RecordFees>();
@@ -95,6 +117,8 @@ namespace Accela.Web.SDK
 
                 // get record summary
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecord").Replace("{recordIds}", recordId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -114,7 +138,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields, int offset = -1, int limit = -1)
+        public ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields = null, int offset = -1, int limit = -1)
         {
             try
             {
@@ -124,8 +148,10 @@ namespace Accela.Web.SDK
                 // create url
                 StringBuilder url = new StringBuilder(apiUrl);
                 url = url.Append(ConfigurationReader.GetValue("SearchRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
-                if (!string.IsNullOrEmpty(fields))
+                if (fields != null)
                     url.Append("&fields=").Append(fields);
+                if (this.language != null)
+                    url.Append("&lang=").Append(this.language);
 
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
                 PaginationInfo paginationInfo = null;
@@ -160,6 +186,8 @@ namespace Accela.Web.SDK
                     url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                     if (!string.IsNullOrEmpty(filter))
                         url.Append("&").Append(filter);
+                    if (this.language != null)
+                        url.Append("&lang=").Append(this.language);
                 }
                 else if (this.appType == ApplicationType.Citizen)
                 {
@@ -186,19 +214,19 @@ namespace Accela.Web.SDK
             }
         }
 
-        public RecordId CreateRecordFinalize(Record record, string token)
+        public Record CreateRecordFinalize(Record record, string token)
         {
-            return CreateRecordInternal(record, token, "final");
+            return CreateRecordInternal(record, token, "final", null);
         }
 
-        public RecordId CreateRecordInitialize(Record record, string token)
+        public Record CreateRecordInitialize(Record record, string token, string isFeeEstimate = null)
         {
-            return CreateRecordInternal(record, token, "initial");
+            return CreateRecordInternal(record, token, "initial", isFeeEstimate);
         }
 
-        public RecordId CreateRecord(Record record, string token)
+        public Record CreateRecord(Record record, string token)
         {
-            return CreateRecordInternal(record, token, "");
+            return CreateRecordInternal(record, token, "", null);
         }
 
         public Record UpdateRecordDetail(Record record, string token) // TODO Doesn't work 400 
@@ -211,9 +239,13 @@ namespace Accela.Web.SDK
                 {
                     throw new Exception("Null request provided");
                 }
+                if (string.IsNullOrEmpty(record.id))
+                    throw new Exception("Null record Id Provided");
 
                 // Update 
-                string url = apiUrl + ConfigurationReader.GetValue("UpdateRecord");
+                string url = apiUrl + ConfigurationReader.GetValue("UpdateRecord").Replace("{recordId}", record.id);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendPutRequest(url, record, token, this.appId);
                 return (Record)HttpHelper.ConvertToSDKResponse(record, response);
             }
@@ -232,67 +264,7 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Contacts
-        public ResultDataPaged<Contact> SearchRecordContacts(string token, string filter, int offset = -1, int limit = -1) // TODO
-        {
-            try
-            {
-                // Validate
-                RequestValidator.ValidateToken(token);
-
-                StringBuilder url = new StringBuilder(apiUrl).Append(ConfigurationReader.GetValue("SearchContact")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); ;
-                if (!String.IsNullOrWhiteSpace(filter))
-                {
-                    url.Append("&amp;");
-                    url.Append(filter);
-                }
-
-                // get contacts
-                List<Contact> responseGetRecordContacts = new List<Contact>();
-                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
-                PaginationInfo paginationInfo = null;
-
-                // create response
-                responseGetRecordContacts = (List<Contact>)HttpHelper.ConvertToSDKResponse(responseGetRecordContacts, response, ref paginationInfo);
-                ResultDataPaged<Contact> results = new ResultDataPaged<Contact> { Data = responseGetRecordContacts, PageInfo = paginationInfo };
-                return results;
-            }
-            catch (WebException webException)
-            {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Search Record Contacts :"));
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Search Record Contacts :"));
-            }
-        }
-
-        public List<ContactType> GetContactTypes(string token) // TODO 404 BUg opened
-        {
-            try
-            {
-                // Validate
-                RequestValidator.ValidateToken(token);
-
-                // get contacts
-                List<ContactType> contactTypes = new List<ContactType>();
-                string url = apiUrl + ConfigurationReader.GetValue("GetContactTypes");
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
-
-                // create response
-                contactTypes = (List<ContactType>)HttpHelper.ConvertToSDKResponse(contactTypes, response);
-                return contactTypes;
-            }
-            catch (WebException webException)
-            {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Contact Types :"));
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Contact Types :"));
-            }
-        }
-
-        public ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, int offset = -1, int limit = -1)
+        public ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, string fields = null, int offset = -1, int limit = -1)
         {
             try
             {
@@ -304,8 +276,17 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get contacts
-                string url = apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRecordContacts").Replace("{recordIds}", recordId).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
                 PaginationInfo paginationInfo = null;
 
                 // create response
@@ -324,7 +305,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public Result CreateRecordContact(List<Contact> contacts, string recordId, string token) // TODO
+        public Result CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null)
         {
             try
             {
@@ -336,10 +317,18 @@ namespace Accela.Web.SDK
                     throw new Exception("Null Record Id provided");
                 }
 
+                // Create 
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("recordId", recordId));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
 
-                // Update 
-                string url = apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("recordId", recordId);
-                RESTResponse response = HttpHelper.SendPostRequest(url, contacts, token, this.appId);
+                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), contacts, token, this.appId);
 
                 // create response
                 Result result = new Result();
@@ -348,15 +337,15 @@ namespace Accela.Web.SDK
             }
             catch (WebException webException)
             {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Update Record Contact :"));
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Create Record Contact :"));
             }
             catch (Exception exception)
             {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Update Record Contact :"));
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Create Record Contact :"));
             }
         }
 
-        public Contact UpdateRecordContact(Contact contact, string recordId, string token) // TODO
+        public Contact UpdateRecordContact(Contact contact, string recordId, string token, string fields = null)
         {
             try
             {
@@ -368,12 +357,23 @@ namespace Accela.Web.SDK
                 }
                 if (contact == null)
                 {
-                    throw new Exception("Null request provided");
+                    throw new Exception("Null contact provided");
                 }
+                if (string.IsNullOrEmpty(contact.id))
+                    throw new Exception("Null contact Id provided");
 
                 // Update 
-                string url = apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contact.id);
-                RESTResponse response = HttpHelper.SendPutRequest(url, contact, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contact.id));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendPutRequest(url.ToString(), contact, token, this.appId);
 
                 // create response
                 return (Contact)HttpHelper.ConvertToSDKResponse(contact, response);
@@ -388,7 +388,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void DeleteRecordContact(string contactId, string recordId, string token)
+        public void DeleteRecordContact(string contactId, string recordId, string token, string fields = null)
         {
             try
             {
@@ -404,8 +404,17 @@ namespace Accela.Web.SDK
                 }
 
                 // Update 
-                string url = apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contactId);
-                RESTResponse response = HttpHelper.SendDeleteRequest(url, token, appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contactId));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendDeleteRequest(url.ToString(), token, appId);
                 HttpHelper.ConvertToSDKResponse(null, response);
             }
             catch (WebException webException)
@@ -433,6 +442,8 @@ namespace Accela.Web.SDK
 
                 // get Custom Fields
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecordCustomFields").Replace("{recordIds}", recordId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -447,34 +458,6 @@ namespace Accela.Web.SDK
             catch (Exception exception)
             {
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Custom Fields :"));
-            }
-        }
-
-        // Describe Custom Fields
-        public Response DescribeRecordCustomFields(string recordTypeId, string token) // TODO
-        {
-            try
-            {
-                // Validate
-                if (String.IsNullOrWhiteSpace(recordTypeId))
-                {
-                    throw new Exception("Null Record Type Id provided");
-                }
-                RequestValidator.ValidateToken(token);
-
-                // get Custom Field Desc
-                Response asis = new Response();
-                string url = apiUrl + ConfigurationReader.GetValue("DescribeASI").Replace("{recordTypeId}", recordTypeId);
-                //asis = (ResponseGetRecordASIs)HttpHelper.SendGetRequest(url, asis, token, appInfo);
-                return asis;
-            }
-            catch (WebException webException)
-            {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Describe Record Custom Fields :"));
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Describe Record Custom Fields :"));
             }
         }
 
@@ -495,6 +478,8 @@ namespace Accela.Web.SDK
 
                 // update Custom Fields
                 string url = apiUrl + ConfigurationReader.GetValue("UpdateRecordCustomFields").Replace("{recordId}", recordId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendPutRequest(url, customFieldList, token, this.appId);
 
                 // create response
@@ -514,7 +499,7 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Documents
-        public List<Document> GetRecordDocuments(string recordId, string token)
+        public List<Document> GetRecordDocuments(string recordId, string token, string fields = null)
         {
             try
             {
@@ -544,7 +529,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token) // TODO does not work
+        public string CreateRecordDocument(AttachmentInfo attachmentInfo, string recordId, string token, string group = null, string category = null, string password = null, string userId = null)
         {
             try
             {
@@ -553,19 +538,28 @@ namespace Accela.Web.SDK
                 {
                     throw new Exception("Null Record Id provided");
                 }
-                if (String.IsNullOrWhiteSpace(documentPath))
+                if (attachmentInfo == null)
                 {
-                    throw new Exception("Please provide a valid path to upload your document");
+                    throw new Exception("Please provide a valid attachment");
                 }
                 RequestValidator.ValidateToken(token);
 
-                string url = apiUrl + ConfigurationReader.GetValue("CreateRecordDocument").Replace("{recordId}", recordId);
-                HttpHelper.SendUploadRequest(documentPath, documentDescription, url, token, appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("CreateRecordDocument").Replace("{recordId}", recordId));
+                if (this.language != null || password != null || userId != null || group != null || category != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (userId != null)
+                    url.Append("userId=").Append(userId).Append("&");
+                if (password != null)
+                    url.Append("password=").Append(password).Append("&");
+                if (group != null)
+                    url.Append("group=").Append(group).Append("&");
+                if (category != null)
+                    url.Append("category=").Append(category).Append("&");
+                url = url.Replace("&", "", url.Length-1, 1);
 
-                // create response
-                //Document doc = new Document();
-                //doc = (Document)HttpHelper.ConvertToSDKResponse(doc, response);
-                //return doc;
+                return HttpHelper.SendUploadRequest(attachmentInfo, url.ToString(), token, appId);
             }
             catch (WebException webException)
             {
@@ -577,33 +571,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public void DeleteRecordDocuments(string recordId, string token) // TODO test
-        {
-            try
-            {
-                // Validate
-                if (String.IsNullOrWhiteSpace(recordId))
-                {
-                    throw new Exception("Null Record Id provided");
-                }
-                RequestValidator.ValidateToken(token);
-
-                // delete documents
-                string url = apiUrl + ConfigurationReader.GetValue("DeleteRecordDocuments").Replace("{recordIds}", recordId);
-                RESTResponse response = HttpHelper.SendDeleteRequest(url, token, this.appId);
-                HttpHelper.ConvertToSDKResponse(null, response);
-            }
-            catch (WebException webException)
-            {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Delete Record Documents :"));
-            }
-            catch (Exception exception)
-            {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Delete Record Documents :"));
-            }
-        }
-
-        public void DeleteRecordDocument(string documentId, string recordId, string token) // TODO test
+        public void DeleteRecordDocument(string documentId, string recordId, string token, string password = null, string userId = null)
         {
             try
             {
@@ -619,8 +587,18 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // delete document
-                string url = apiUrl + ConfigurationReader.GetValue("DeleteRecordDocuments").Replace("{recordIds}", recordId).Replace("{documentId}", documentId);
-                RESTResponse response = HttpHelper.SendDeleteRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DeleteRecordDocuments").Replace("{recordIds}", recordId).Replace("{documentId}", documentId));
+                if (this.language != null || password != null || userId != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (userId != null)
+                    url.Append("userId=").Append(userId).Append("&");
+                if (password != null)
+                    url.Append("password=").Append(password).Append("&");
+                url = url.Replace("&", "", url.Length-1, 1);
+
+                RESTResponse response = HttpHelper.SendDeleteRequest(url.ToString(), token, this.appId);
                 HttpHelper.ConvertToSDKResponse(null, response);
             }
             catch (WebException webException)
@@ -639,9 +617,15 @@ namespace Accela.Web.SDK
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
+                if (String.IsNullOrWhiteSpace(recordId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
 
                 // get document types 
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecordDocumentTypes").Replace("{recordId}", recordId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -662,7 +646,7 @@ namespace Accela.Web.SDK
         #endregion
 
         # region Record Workflows
-        public List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false)
+        public List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false, string fields = null)
         {
             try
             {
@@ -674,8 +658,17 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get workflow tasks
-                string url = apiUrl + ConfigurationReader.GetValue("GetWorkflowTasks").Replace("{recordId}", recordId);
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetWorkflowTasks").Replace("{recordId}", recordId));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
                 List<WorkflowTask> workflowTasks = new List<WorkflowTask>();
@@ -705,7 +698,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public WorkflowTask GetWorkflowTask(string recordId, string taskId, string token)
+        public WorkflowTask GetWorkflowTask(string recordId, string taskId, string token, string fields = null)
         {
             try
             {
@@ -721,8 +714,17 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get workflow tasks
-                string url = apiUrl + ConfigurationReader.GetValue("GetWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId);
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
                 WorkflowTask workflowTask = new WorkflowTask();
@@ -739,7 +741,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token)
+        public WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token, string fields = null)
         {
             try
             {
@@ -748,6 +750,10 @@ namespace Accela.Web.SDK
                 {
                     throw new Exception("Null Record Id provided");
                 }
+                if (String.IsNullOrWhiteSpace(taskId))
+                {
+                    throw new Exception("Null Task Id provided");
+                }
                 if (workflowTask == null)
                 {
                     throw new Exception("Null Workflow task provided");
@@ -755,8 +761,8 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // update workflow task
-                string url = apiUrl + ConfigurationReader.GetValue("UpdateWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId);
-                RESTResponse response = HttpHelper.SendPutRequest(url, workflowTask, token, appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateWorkflowTask").Replace("{recordId}", recordId).Replace("{id}", taskId));
+                RESTResponse response = HttpHelper.SendPutRequest(url.ToString(), workflowTask, token, appId);
 
                 // create response
                 WorkflowTask updatedTask = new WorkflowTask();
@@ -765,11 +771,11 @@ namespace Accela.Web.SDK
             }
             catch (WebException webException)
             {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Workflow tasks :"));
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Update Workflow tasks :"));
             }
             catch (Exception exception)
             {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Workflow tasks :"));
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Update Workflow tasks :"));
             }
         }
         #endregion
@@ -781,9 +787,15 @@ namespace Accela.Web.SDK
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
+                if (String.IsNullOrWhiteSpace(recordTypeId))
+                {
+                    throw new Exception("Null Record Type Id provided");
+                }
 
                 // get recrd status 
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecordStatuses").Replace("{id}", recordTypeId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
                 RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
 
                 // create response
@@ -803,7 +815,7 @@ namespace Accela.Web.SDK
         #endregion
 
         #region private methods
-        private RecordId CreateRecordInternal(Record record, string token, string type)
+        private Record CreateRecordInternal(Record record, string token, string type, string isFeeEstimate)
         {
             try
             {
@@ -812,30 +824,34 @@ namespace Accela.Web.SDK
                 record.ValidateRecordForCreate();
 
                 // Create
-                string url = null;
+                StringBuilder url = new StringBuilder();
                 switch (type)
                 {
                     case "initial":
-                        url = apiUrl + ConfigurationReader.GetValue("CreatePartialRecord");
+                        url.Append(apiUrl + ConfigurationReader.GetValue("CreatePartialRecord"));
                         break;
                     case "final":
-                        url = apiUrl + ConfigurationReader.GetValue("CreateFinalRecord");
+                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateFinalRecord"));
                         break;
                     case "":
-                        url = apiUrl + ConfigurationReader.GetValue("CreateRecord");
+                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateRecord"));
                         break;
                 }
+                if (this.language != null || isFeeEstimate != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && isFeeEstimate != null)
+                    url.Append("&");
+                if (isFeeEstimate != null)
+                    url.Append("isFeeEstimate=").Append(isFeeEstimate);
 
-                RESTResponse response = HttpHelper.SendPostRequest(url, record, token, this.appId);
+                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
 
                 // Response
                 Record responseRecord = new Record();
                 responseRecord = (Record)HttpHelper.ConvertToSDKResponse(responseRecord, response);
-                if (responseRecord != null)
-                {
-                    return new RecordId { id = responseRecord.id, customId = responseRecord.customId, serviceProviderCode = responseRecord.serviceProviderCode, trackingId = responseRecord.trackingId };
-                }
-                return null;
+                return responseRecord;
             }
             catch (WebException webException)
             {

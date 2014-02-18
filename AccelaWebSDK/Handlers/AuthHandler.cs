@@ -15,6 +15,8 @@ namespace Accela.Web.SDK
     {
         public AuthHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
 
+        public AuthHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+
         public Token GetToken(string redirectUrl, string code)
         {
             // Validate
@@ -40,7 +42,7 @@ namespace Accela.Web.SDK
             return token;
         }
 
-        public UserProfile GetUserProfile(string token)
+        public UserProfile GetUserProfile(string token, string fields = null)
         {
             try
             {
@@ -48,8 +50,16 @@ namespace Accela.Web.SDK
                 RequestValidator.ValidateToken(token);
 
                 // get user profile
-                string url = apiUrl + ConfigurationReader.GetValue("GetUserProfile");
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetUserProfile"));
+                if (this.language != null || fields != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language);
+                if (this.language != null && fields != null)
+                    url.Append("&");
+                if (fields != null)
+                    url.Append("fields=").Append(fields);
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
                 UserProfile userProfile = new UserProfile();
@@ -87,7 +97,7 @@ namespace Accela.Web.SDK
                 Token token = GetToken(redirectUrl, info[0]);
 
                 // get user profile
-                UserProfile userProfile = GetUserProfile(token.access_token);
+                UserProfile userProfile = GetUserProfile(token.access_token, null);
                 CurrentUserProfile currentUserProfile = new CurrentUserProfile
                 {
                     UserProfile = userProfile,

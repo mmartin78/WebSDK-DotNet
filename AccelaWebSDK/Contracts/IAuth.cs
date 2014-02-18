@@ -11,7 +11,7 @@ namespace Accela.Web.SDK
     {
         void Login(string redirectUrl, string scope, string agencyName, string agencyEnvironment);
         CurrentUserProfile GetTokenAndCurrentUserProfile(string redirectUrl);
-        UserProfile GetUserProfile(string token);
+        UserProfile GetUserProfile(string token, string fields = null);
         Token GetToken(string redirectUrl, string code);
     }
 }

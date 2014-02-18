@@ -16,6 +16,7 @@ namespace Accela.Web.SDK
         protected string appId;
         protected string appSecret;
         protected ApplicationType appType = ApplicationType.None;
+        protected string language;
 
         static BaseHandler()
         {
@@ -30,6 +31,14 @@ namespace Accela.Web.SDK
             this.appId = appId;
             this.appSecret = appSecret;
             this.appType = appType;
+        }
+
+        public BaseHandler(string appId, string appSecret, ApplicationType appType, string lang)
+        {
+            this.appId = appId;
+            this.appSecret = appSecret;
+            this.appType = appType;
+            this.language = lang;
         }
     }
 }

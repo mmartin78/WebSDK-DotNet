@@ -12,43 +12,39 @@ namespace Accela.Web.SDK
         // Records
         Record GetRecord(string recordId, string token);
         ResultDataPaged<Record> GetRecords(string token, string filter, int offset = -1, int limit = -1);
-        RecordId CreateRecord(Record record, string token);
-        RecordId CreateRecordInitialize(Record record, string token);
-        RecordId CreateRecordFinalize(Record record, string token);
+        Record CreateRecord(Record record, string token);
+        Record CreateRecordInitialize(Record record, string token, string isFeeEstimate = null);
+        Record CreateRecordFinalize(Record record, string token);
         Record UpdateRecordDetail(Record record, string token);
         void DeleteRecord(string recordId, string token);
-        ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields, int offset = -1, int limit = -1);
+        ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields = null, int offset = -1, int limit = -1);
 
         // Related Records
-        List<Record> GetRelatedRecords(string recordId, string token);
+        List<RelatedRecord> GetRelatedRecords(string recordId, string token, string relationship = null, string fields = null);
 
         // Record Fees
-        List<RecordFees> GetRecordFees(string recordId, string token);
+        List<RecordFees> GetRecordFees(string recordId, string token, string fields = null, string status = null);
 
         // Record Contacts
-        ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, int offset = -1, int limit = -1);
-        ResultDataPaged<Contact> SearchRecordContacts(string token, string filter, int offset = -1, int limit = -1);
-        List<ContactType> GetContactTypes(string token);
-        Result CreateRecordContact(List<Contact> contacts, string recordId, string token);
-        Contact UpdateRecordContact(Contact contact, string recordId, string token);
-        void DeleteRecordContact(string contactId, string recordId, string token);
+        ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, string fields = null, int offset = -1, int limit = -1);
+        Result CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null);
+        Contact UpdateRecordContact(Contact contact, string recordId, string token, string fields = null);
+        void DeleteRecordContact(string contactId, string recordId, string token, string fields = null);
 
         // Record Documents
-        List<Document> GetRecordDocuments(string recordId, string token);
-        void CreateRecordDocument(string documentPath, string documentDescription, string recordId, string token);
-        void DeleteRecordDocuments(string recordId, string token);
-        void DeleteRecordDocument(string documentId, string recordId, string token);
+        List<Document> GetRecordDocuments(string recordId, string token, string fields = null);
+        string CreateRecordDocument(AttachmentInfo attachmentInfo, string recordId, string token, string group = null, string category = null, string password = null, string userId = null);
+        void DeleteRecordDocument(string documentId, string recordId, string token, string password = null, string userId = null);
         List<DocumentType> GetRecordDocumentTypes(string recordId, string token);
 
         // Record Custom Fields
-        // Response DescribeRecordCustomFields(string recordTypeId, string token);
         List<Dictionary<string, string>> GetRecordCustomFields(string recordId, string token);
         List<Dictionary<string, string>> UpdateRecordCustomFields(string recordId, List<Dictionary<string, string>> customFieldList, string token);
 
         // Record Workflows
-        List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false);
-        WorkflowTask GetWorkflowTask(string recordId, string taskId, string token);
-        WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token);
+        List<WorkflowTask> GetWorkflowTasks(string recordId, string token, bool returnActiveOnly = false, string fields = null);
+        WorkflowTask GetWorkflowTask(string recordId, string taskId, string token, string fields = null);
+        WorkflowTask UpdateWorkflowTask(string recordId, string taskId, UpdateWorkflowTaskRequest workflowTask, string token, string fields = null);
 
         // Record Status
         List<Status> GetRecordStatuses(string recordTypeId, string token);

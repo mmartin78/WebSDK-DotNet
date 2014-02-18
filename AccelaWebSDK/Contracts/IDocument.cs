@@ -9,7 +9,7 @@ namespace Accela.Web.SDK
 {
     public interface IDocument
     {
-        Document GetDocument(string documentId, string token);
-        void DownloadDocument(string filePath, string documentId, string token);
+        Document GetDocument(string documentId, string token, string fields = null);
+        AttachmentInfo DownloadDocument(string documentId, string token, string password = null, string userId = null);
     }
 }
