@@ -250,6 +250,7 @@ namespace Accela.Web.SDK
                     if (response.Status != 200)
                     {
                         string message = string.Format("Request Failed with Code {0} and Error {1} ", response.Code, response.Message);
+                        message += httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
                         throw new Exception(message);
                     }
                     else if (response.Status == 200 && response.Result != null && response.Result.ToString().Contains("failedCount"))
@@ -257,7 +258,10 @@ namespace Accela.Web.SDK
                         Result result = new Result();
                         result = (Result)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
                         if (result.failedCount > 0)
-                            throw new Exception("Request Failed");
+                        {
+                            string message = httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
+                            throw new Exception("Request Failed " + message);
+                        }
                     }
                 }
                 return response;

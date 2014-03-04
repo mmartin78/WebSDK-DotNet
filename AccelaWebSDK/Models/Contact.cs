@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Accela.Web.SDK.Models
 {
+    public class BirthCity
+    {
+        public string value { get; set; }
+        public string text { get; set; }
+    }
+
+    public class BirthRegion
+    {
+        public string value { get; set; }
+        public string text { get; set; }
+    }
+
     public class Relation
     {
         public string value { get; set; }
@@ -45,7 +57,7 @@ namespace Accela.Web.SDK.Models
     public class ContactAddress
     {
         public string city { get; set; }
-        public string zip { get; set; }
+        public string postalCode { get; set; }
         public Country country { get; set; }
         public State state { get; set; }
         public string addressLine2 { get; set; }
@@ -61,14 +73,14 @@ namespace Accela.Web.SDK.Models
         public string startDate { get; set; }
         public string endDate { get; set; }
         public string suffix { get; set; }
-        public string primary { get; set; }
+        public string isPrimary { get; set; }
         public string birthDate { get; set; }
-        public string faxNumber { get; set; }
+        public string fax { get; set; }
         public string socialSecurityNumber { get; set; }
-        public string typeFlag { get; set; }
+        public string individualOrOrganization { get; set; }
         public Salutation salutation { get; set; }
         public string federalEmployerId { get; set; }
-        public string phoneNumber1 { get; set; }
+        public string phone1 { get; set; }
         public string id { get; set; }
         public string title { get; set; }
         public RecordId recordId { get; set; }
@@ -77,8 +89,8 @@ namespace Accela.Web.SDK.Models
         public string email { get; set; }
         public string postOfficeBox { get; set; }
         public string phone3CountryCode { get; set; }
-        public string phoneNumber3 { get; set; }
-        public string phoneNumber2 { get; set; }
+        public string phone3 { get; set; }
+        public string phone2 { get; set; }
         public string faxCountryCode { get; set; }
         public string businessName { get; set; }
         public string referenceContactId { get; set; }
@@ -92,5 +104,7 @@ namespace Accela.Web.SDK.Models
         public string lastName { get; set; }
         public Relation relation { get; set; }
         public PreferredChannel preferredChannel { get; set; }
+        public BirthCity birthCity { get; set; }
+        public BirthRegion birthRegion { get; set; }
     }
 }

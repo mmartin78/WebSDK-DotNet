@@ -318,7 +318,7 @@ namespace Accela.Web.SDK
                 }
 
                 // Create 
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("recordId", recordId));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("CreateRecordContact").Replace("{recordId}", recordId));
                 if (this.language != null || fields != null)
                     url.Append("?");
                 if (this.language != null)
@@ -363,7 +363,7 @@ namespace Accela.Web.SDK
                     throw new Exception("Null contact Id provided");
 
                 // Update 
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("recordId", recordId).Replace("{id}", contact.id));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("UpdateRecordContact").Replace("{recordId}", recordId).Replace("{id}", contact.id));
                 if (this.language != null || fields != null)
                     url.Append("?");
                 if (this.language != null)
