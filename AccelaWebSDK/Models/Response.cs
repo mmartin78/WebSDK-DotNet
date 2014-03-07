@@ -7,15 +7,6 @@ using System.Collections;
 
 namespace Accela.Web.SDK.Models
 {
-    public class RESTResponse
-    {
-        public int Status { get; set; }
-        public string Code { get; set; }
-        public string Message { get; set; }
-        public PaginationInfo Page { get; set; }
-        public Object Result { get; set; }
-    }
-
     public class PaginationInfo
     {
         public int offset { get; set; }
@@ -35,9 +26,18 @@ namespace Accela.Web.SDK.Models
 
     public class Result
     {
-        public List<string> failedIDs { get; set; }
-        public int failedCount { get; set; }
-        public int successCount { get; set; }
-        public List<string> successIDs { get; set; }
+        public int id { get; set; }
+        public string code { get; set; }
+        public string message { get; set; }
+        public bool isSuccess { get; set; }
+    }
+
+    public class RESTResponse
+    {
+        public int Status { get; set; }
+        public string Code { get; set; }
+        public string Message { get; set; }
+        public PaginationInfo Page { get; set; }
+        public Object Result { get; set; }
     }
 }

@@ -140,7 +140,8 @@ namespace Accela.Web.SDK
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", token);
                 client.DefaultRequestHeaders.Add("ContentType", contentType);
-                var result = client.GetAsync(url);
+                //HttpResponseMessage response = await client.GetAsync(url);
+                //var result = client.GetAsync(url);
                 //attachmentInfo.FileName
                 //attachmentInfo.FileContent = result.Result.Content["file"];
             }
@@ -253,14 +254,19 @@ namespace Accela.Web.SDK
                         message += httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
                         throw new Exception(message);
                     }
-                    else if (response.Status == 200 && response.Result != null && response.Result.ToString().Contains("failedCount"))
+                    else if (response.Status == 200 && response.Result != null)
                     {
-                        Result result = new Result();
-                        result = (Result)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
-                        if (result.failedCount > 0)
+                        string resultString = response.Result.ToString();
+                        if (resultString.Contains("code") && resultString.Contains("isSuccess"))
                         {
-                            string message = httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
-                            throw new Exception("Request Failed " + message);
+                            List<Result> result = new List<Result>();
+                            result = (List<Result>)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
+                            var failedResult = result.Where(r => r.isSuccess == false).Select(r => r).SingleOrDefault();
+                            if (failedResult != null)
+                            { 
+                                string message = resultString +  " " + httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
+                                throw new Exception("Request Failed " + message);
+                            }
                         }
                     }
                 }

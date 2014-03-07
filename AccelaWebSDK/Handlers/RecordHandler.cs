@@ -305,7 +305,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public Result CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null)
+        public List<Result> CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null)
         {
             try
             {
@@ -331,8 +331,8 @@ namespace Accela.Web.SDK
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), contacts, token, this.appId);
 
                 // create response
-                Result result = new Result();
-                return (Result)HttpHelper.ConvertToSDKResponse(result, response);
+                List<Result> result = new List<Result>();
+                return (List<Result>)HttpHelper.ConvertToSDKResponse(result, response);
 
             }
             catch (WebException webException)
