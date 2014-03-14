@@ -32,9 +32,9 @@ namespace ConsoleApplication1
             string rId = "BPTMSTR-DUB14-00000-00023";
             string taskId = "1-12714";
 
-            //string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
+            string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
 
-            string token = "_3m1WrctvYBv3HrA-AQHaDI6YsrPUws2DlqBuUwDISsQeS4CUyEEX8wqKJPoQbjEavivgOuU7JWwTNePLHG4zQ068MhfgXHscZktHlBnP-zs5ho0VqEIg-hgKlTDVsKZP0LJWpiYEWCVrKsuQpN2LVeiWVOVbGtzmFBknvq0rKGoqmScyAgMkLAKsQ9FyaFY8LFUxJqwfRu2Fmn5JHS72rECKg8gG-KGQpy1GbDmXhjqNCQwWwuT2BSVUyD0e8GxhN4hCvBRUFcZ_VmZmDGKjY6GYgHT5P59VPAa6SfZqhnzguZIUTfmcsH1gjqy4DMHiKmnhPn4eKo9b1W_1zx2ybayg6eLlkfnR18VWk4k8v2AlH1cEI28j6wEmgDwZb0onSh9kXYB7rSSGleGa-9n1rldGBD61vLbtjCjwJCT758HKsf9hD9NqITNPbwF2WnW0";
+            //string token = "_3m1WrctvYBv3HrA-AQHaDI6YsrPUws2DlqBuUwDISsQeS4CUyEEX8wqKJPoQbjEavivgOuU7JWwTNePLHG4zQ068MhfgXHscZktHlBnP-zs5ho0VqEIg-hgKlTDVsKZP0LJWpiYEWCVrKsuQpN2LVeiWVOVbGtzmFBknvq0rKGoqmScyAgMkLAKsQ9FyaFY8LFUxJqwfRu2Fmn5JHS72rECKg8gG-KGQpy1GbDmXhjqNCQwWwuT2BSVUyD0e8GxhN4hCvBRUFcZ_VmZmDGKjY6GYgHT5P59VPAa6SfZqhnzguZIUTfmcsH1gjqy4DMHiKmnhPn4eKo9b1W_1zx2ybayg6eLlkfnR18VWk4k8v2AlH1cEI28j6wEmgDwZb0onSh9kXYB7rSSGleGa-9n1rldGBD61vLbtjCjwJCT758HKsf9hD9NqITNPbwF2WnW0";
             
             //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
@@ -48,8 +48,8 @@ namespace ConsoleApplication1
 
             //RecordFilter f = new RecordFilter { status = new Status { value = "In Review" }, type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "Application" }, openedDate = "02/27/2014", endOpenedDate = "03/10/2014" };
             //RecordFilter f = new RecordFilter { type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "License" }};
-            RecordFilter f = new RecordFilter { module = "Licenses" };
-            ResultDataPaged<Record> records = rec.SearchRecords(token, f);
+            //RecordFilter f = new RecordFilter { module = "Licenses" };
+            //ResultDataPaged<Record> records = rec.SearchRecords(token, f);
 
             // Contact
             //List<ContactType> ct = con.GetContactTypes(token, "Licenses");
@@ -91,27 +91,31 @@ namespace ConsoleApplication1
             //ResultDataPaged<Record> records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "Application" }, contact = new Contact { firstName = "Sam" } }, null);
             //records = rec.GetRecords(token, null);
             //record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
-            record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
-            Record r1 = rec.CreateRecordInitialize(record, token);
-            record = rec.GetRecord(r1.id, token);
-            ResultDataPaged<Contact> contacts = rec.GetRecordContacts(record.id, token);
-            FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
-            if (file != null)
-            {
-                AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
-                at.FileContent = new StreamContent(file.OpenRead());
-                rec.CreateRecordDocument(at, record.id, token, "ooo");
-            }
-            List<Document> docs = rec.GetRecordDocuments(record.id, token);
+            //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
+            //Record r1 = rec.CreateRecordInitialize(record, token);
+            //record = rec.GetRecord(r1.id, token);
+            //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(record.id, token);
+            //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
+            //if (file != null)
+            //{
+            //    AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
+            //    at.FileContent = new StreamContent(file.OpenRead());
+            //    rec.CreateRecordDocument(at, record.id, token, "ooo");
+            //}
+            //List<Document> docs = rec.GetRecordDocuments(record.id, token);
             //record.contacts = new List<Contact> { new Contact { id = "1234", firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
-            record = rec.CreateRecordFinalize(record, token);
-            contacts = rec.GetRecordContacts(record.id, token);
-            docs = rec.GetRecordDocuments(record.id, token);
+            //record = rec.CreateRecordFinalize(record, token);
+            //contacts = rec.GetRecordContacts(record.id, token);
+            //docs = rec.GetRecordDocuments(record.id, token);
 
             // Documents
             //List<DocumentType> d = rec.GetRecordDocumentTypes(recordId, token);
-            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
-            //doc.DownloadDocument("942", token);
+            List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            Stream s = doc.DownloadDocument("942", token);
+            using (FileStream fs = new FileStream(@"C:\Swapnali\TestPurposes\Doggy.jpeg", FileMode.Create)) 
+            {
+                s.CopyTo(fs);
+            }
 
             //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
             //if (file != null)

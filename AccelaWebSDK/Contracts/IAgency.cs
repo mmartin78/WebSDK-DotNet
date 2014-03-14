@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Accela.Web.SDK.Models;
+using System.IO;
 
 namespace Accela.Web.SDK
 {
     public interface IAgency
     {
         Agency GetAgency(string token, string agencyName);
-        AttachmentInfo GetAgencyLogo(string token, string agencyName);
+        Stream GetAgencyLogo(string token, string agencyName);
     }
 
     // get agencies

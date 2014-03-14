@@ -57,7 +57,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public AttachmentInfo DownloadDocument(string documentId, string token, string password = null, string userId = null) 
+        public Stream DownloadDocument(string documentId, string token, string password = null, string userId = null) 
         {
             try
             {
@@ -80,9 +80,8 @@ namespace Accela.Web.SDK
                     url.Append("password=").Append(password).Append("&");
                 url = url.Replace("&", "", url.Length-1, 1) ;
 
-                AttachmentInfo attachmentInfo = null;
-                attachmentInfo = HttpHelper.SendDownloadRequest(url.ToString(), attachmentInfo, token, this.appId);
-                return attachmentInfo;
+                var stream = HttpHelper.SendDownloadRequest(url.ToString(), token, this.appId);
+                return stream.Result;
             }
             catch (WebException webException)
             {

@@ -66,22 +66,6 @@ namespace Accela.Web.SDK
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    //FileInfo file = null;
-
-                    //file = new FileInfo(documentPath);
-                    //if (file != null)
-                    //{
-                    //    StreamContent fileContent = new StreamContent(file.OpenRead());
-                    //    content.Add(fileContent, "\"file\"", "\"" + file.Name + "\"");
-                    //    content.Add(new StringContent(GetFileInfo(documentPath, description)), "\"fileInfo\"");
-
-                    //    client.DefaultRequestHeaders.Add(appIdHeader, appId);
-                    //    client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    //    client.DefaultRequestHeaders.Add("Authorization", token);
-                    //    var result = client.PostAsync(url, content).Result;
-                    //    return (string)result.Content.ReadAsStringAsync().Result;
-                    //}
-
                     if (attachmentInfo.FileContent != null)
                     {
                         string fileInfo = GetFileInfo(attachmentInfo);
@@ -113,28 +97,25 @@ namespace Accela.Web.SDK
             return ReceiveRESTResponse(httpRequest);
         }
 
-        public static AttachmentInfo SendDownloadRequest(string url, AttachmentInfo attachmentInfo, string token, string appId)
+        public static async Task<Stream> SendDownloadRequest(string url, string token, string appId)
         {
-            var response = DownloadDoc(url, token, appId);
-            return attachmentInfo;
+            return await DownloadDoc(url, token, appId);
         }
 
-        private static async Task<string> DownloadDoc(string url, string token, string appId)
+        private static async Task<Stream> DownloadDoc(string url, string token, string appId)
         {
             using (var client = new HttpClient())
-                try
+            {
+                client.DefaultRequestHeaders.Add(appIdHeader, appId);
+                client.DefaultRequestHeaders.Add("Authorization", token);
+                client.DefaultRequestHeaders.Add("ContentType", contentType);
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
                 {
-                    client.DefaultRequestHeaders.Add(appIdHeader, appId);
-                    client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    client.DefaultRequestHeaders.Add("Authorization", token);
-                    client.DefaultRequestHeaders.Add("ContentType", contentType);
-                    var response = await client.GetAsync(url);
-                    return (await response.Content.ReadAsStringAsync());
+                    return response.Content.ReadAsStreamAsync().Result;
                 }
-                catch (Exception ex)
-                {
-                    return null;
-                }
+            }
+            return null;
         }
 
         public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
