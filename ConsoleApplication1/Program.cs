@@ -32,8 +32,10 @@ namespace ConsoleApplication1
             string rId = "BPTMSTR-DUB14-00000-00023";
             string taskId = "1-12714";
 
-            string token = "t9xWJgtflKXHTVtmby9duvYpSSC_DtV7wY1bS1FShta-JhwGlSElfvm0j_q-RZExHugqKPZcEpDJOmsQH_jHouF4hvfCzZPSdlGEK1xEPLKxhcN3T91lRhwtzYTE0pGS7m3Ddp7FOrFLBadap107zuFCiVkjRauY6EUC2BUHVm6rIGdQ2WAw7qJjU_Tl8NZqJXqkwR1QgtaDU30pSOMYM3aos3DpoAMjVwatMDU7uqW4EoPC8y8tzl97LXdxs-cRyQ_9xD_FujBhzGGuEJqh8WGKs5kd4cJ0i75Oip3XWgXdAx-j2Dd_xsXY9W460QFUAFwRbQe42JRpWwCuuc1Gl8VuJ3PEAeU4SHEyh4NK5feZyFTTaRICjhFIqZ-xUmyiVfQ53lHXFSJ_8mw-VbQlg7CpM5bu8P8JNk34pb_f08mK_DemzPKpS_gTfZ_dsiP-boQf5HP85TMgKW7pMpjTUq0bWs4zaVh0K9QQKeBgbi12SzRQjaEQqFs-39f63c8FJva5OwGR-bXuYGwQNYnSqgze4Y9Nrc6w9zJ26fOGkgQ1";
+            //string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
 
+            string token = "_3m1WrctvYBv3HrA-AQHaDI6YsrPUws2DlqBuUwDISsQeS4CUyEEX8wqKJPoQbjEavivgOuU7JWwTNePLHG4zQ068MhfgXHscZktHlBnP-zs5ho0VqEIg-hgKlTDVsKZP0LJWpiYEWCVrKsuQpN2LVeiWVOVbGtzmFBknvq0rKGoqmScyAgMkLAKsQ9FyaFY8LFUxJqwfRu2Fmn5JHS72rECKg8gG-KGQpy1GbDmXhjqNCQwWwuT2BSVUyD0e8GxhN4hCvBRUFcZ_VmZmDGKjY6GYgHT5P59VPAa6SfZqhnzguZIUTfmcsH1gjqy4DMHiKmnhPn4eKo9b1W_1zx2ybayg6eLlkfnR18VWk4k8v2AlH1cEI28j6wEmgDwZb0onSh9kXYB7rSSGleGa-9n1rldGBD61vLbtjCjwJCT758HKsf9hD9NqITNPbwF2WnW0";
+            
             //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
@@ -44,6 +46,11 @@ namespace ConsoleApplication1
             IAddress ad = new AddressHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
             IContact con = new ContactHandler("635210919579930886", "dcb5ed05e6974820aa661a9fb5307cc5", ApplicationType.Agency);
 
+            //RecordFilter f = new RecordFilter { status = new Status { value = "In Review" }, type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "Application" }, openedDate = "02/27/2014", endOpenedDate = "03/10/2014" };
+            //RecordFilter f = new RecordFilter { type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "License" }};
+            RecordFilter f = new RecordFilter { module = "Licenses" };
+            ResultDataPaged<Record> records = rec.SearchRecords(token, f);
+
             // Contact
             //List<ContactType> ct = con.GetContactTypes(token, "Licenses");
             //ResultDataPaged<Contact> cts = con.SearchContacts(token, new ContactFilter { email = "sdembla@accela.com" });
@@ -53,15 +60,16 @@ namespace ConsoleApplication1
             //AttachmentInfo att = a.GetAgencyLogo(token, "BPTMSTR"); // 404 Not found
 
             // Record Contact
-            ResultDataPaged<Contact> contacts = rec.GetRecordContacts(rId, token);
-            List<Contact> cs = new List<Contact> { 
-                new Contact { isPrimary = "N", businessName = "test",
-                    firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", 
-                    address = new ContactAddress { addressLine1 = "500 San Blvd", city = "San Ramon", state = new State { value = "CA" },
-                    postalCode = "94566" },
-                    type = new ContactType { value = "Pet Owner" } }};
+            //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(rId, token);
+            //List<Contact> cs = new List<Contact> { 
+            //    new Contact { isPrimary = "N", businessName = "test",
+            //        firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", 
+            //        address = new ContactAddress { addressLine1 = "500 San Blvd", city = "San Ramon", state = new State { value = "CA" },
+            //        postalCode = "94566" },
+            //        type = new ContactType { value = "Pet Owner" } },
+            //new Contact()};
 
-            rec.CreateRecordContact(cs, rId, token);
+            //rec.CreateRecordContact(cs, rId, token);
             //contacts = rec.GetRecordContacts(rId, token);
             //Contact c = ((List<Contact>)contacts.Data)[0];
             //c.type.text = null;
@@ -76,33 +84,44 @@ namespace ConsoleApplication1
 
             // Records
             Record record = rec.GetRecord(recordId, token);
-            record.name = "Test Test";
-            record.description = "Test";
-            record = rec.UpdateRecordDetail(record, token);
-            record = rec.GetRecord(recordId, token);
+            //record.name = "Test Test";
+            //record.description = "Test Test";
+            //record = rec.UpdateRecordDetail(record, token);
+            //record = rec.GetRecord(recordId, token);
             //ResultDataPaged<Record> records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "Application" }, contact = new Contact { firstName = "Sam" } }, null);
             //records = rec.GetRecords(token, null);
             //record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
-            //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
-            //Record r1 = rec.CreateRecordInitialize(record, token);
-            //record = rec.GetRecord(r1.id, token);
+            record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
+            Record r1 = rec.CreateRecordInitialize(record, token);
+            record = rec.GetRecord(r1.id, token);
+            ResultDataPaged<Contact> contacts = rec.GetRecordContacts(record.id, token);
+            FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
+            if (file != null)
+            {
+                AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
+                at.FileContent = new StreamContent(file.OpenRead());
+                rec.CreateRecordDocument(at, record.id, token, "ooo");
+            }
+            List<Document> docs = rec.GetRecordDocuments(record.id, token);
             //record.contacts = new List<Contact> { new Contact { id = "1234", firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
-            //record = rec.CreateRecordFinalize(record, token);
+            record = rec.CreateRecordFinalize(record, token);
+            contacts = rec.GetRecordContacts(record.id, token);
+            docs = rec.GetRecordDocuments(record.id, token);
 
             // Documents
             //List<DocumentType> d = rec.GetRecordDocumentTypes(recordId, token);
             //List<Document> docs = rec.GetRecordDocuments(recordId, token);
             //doc.DownloadDocument("942", token);
 
-            FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
-            if (file != null)
-            {
-                AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
-                at.FileContent = new StreamContent(file.OpenRead());
-                rec.CreateRecordDocument(at, recordId, token, "ooo");
-            }
-            rec.DeleteRecordDocument("1012", recordId, token);
-            List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
+            //if (file != null)
+            //{
+            //    AttachmentInfo at = new AttachmentInfo { FileType = "image/jpeg", FileName = "Ducky.jpeg", ServiceProviderCode = "BPTMSTR", Description = "Test" };
+            //    at.FileContent = new StreamContent(file.OpenRead());
+            //    rec.CreateRecordDocument(at, recordId, token, "ooo");
+            //}
+            //rec.DeleteRecordDocument("1012", recordId, token);
+            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
 
             // Status
             //List<Status> s = rec.GetRecordStatuses("Licenses-Animal-Pig-Application", token);
@@ -118,7 +137,12 @@ namespace ConsoleApplication1
 
             // Custom Fields
             List<Dictionary<string, string>> cf = rec.GetRecordCustomFields(recordId, token);
-            rec.UpdateRecordCustomFields(recordId, cf, token);
+            List<Dictionary<string, string>> cfs = new List<Dictionary<string, string>>();
+            Dictionary<string, string> val = new Dictionary<string,string>();
+            val.Add("id", "LIC_DOG_LIC-GENERAL.cINFORMATION");
+            val.Add("Name", "Woofy");
+            cfs.Add(val);
+            rec.UpdateRecordCustomFields(recordId, cfs, token);
         }
     }
 }

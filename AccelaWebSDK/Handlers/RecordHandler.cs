@@ -183,16 +183,16 @@ namespace Accela.Web.SDK
                 StringBuilder url = new StringBuilder(apiUrl);
                 if (this.appType == ApplicationType.Agency)
                 {
-                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
-                    if (!string.IsNullOrEmpty(filter))
-                        url.Append("&").Append(filter);
-                    if (this.language != null)
-                        url.Append("&lang=").Append(this.language);
+                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
                 }
                 else if (this.appType == ApplicationType.Citizen)
                 {
-                    url = url.Append(ConfigurationReader.GetValue("GetMyRecords"));
+                    url = url.Append(ConfigurationReader.GetValue("GetMyRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                 }
+                if (!string.IsNullOrEmpty(filter))
+                    url.Append("&").Append(filter);
+                if (this.language != null)
+                    url.Append("&lang=").Append(this.language);
 
                 // get records
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);

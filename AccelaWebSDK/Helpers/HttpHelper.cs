@@ -10,6 +10,8 @@ using System.Configuration;
 using System.Resources;
 using System.Net.Http;
 using Accela.Web.SDK.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Accela.Web.SDK
 {
@@ -113,39 +115,26 @@ namespace Accela.Web.SDK
 
         public static AttachmentInfo SendDownloadRequest(string url, AttachmentInfo attachmentInfo, string token, string appId)
         {
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.Method = "GET";
-            //request.ContentType = contentType;
-            //request.Accept = accept;
-            //request.Headers.Add(appIdHeader, appId);
-            //request.Headers.Add("Authorization", token);
-            //var httpResponse = (HttpWebResponse)request.GetResponse();
-
-            // Receive
-            //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            //{
-            //    //attachmentInfo.FileContent = streamReader.BaseStream.;
-            //    attachmentInfo.FileType = httpResponse.Headers["Content-Type"];
-            //    if (httpResponse.Headers["Content-Disposition"] != null)
-            //    {
-            //        string[] tmp = httpResponse.Headers["Content-Disposition"].Split('"');
-            //        if (tmp != null && tmp.Length > 2)
-            //            attachmentInfo.FileName = tmp[1];
-            //    }
-            //}
-
-            using (var client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Add(appIdHeader, appId);
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-                client.DefaultRequestHeaders.Add("Authorization", token);
-                client.DefaultRequestHeaders.Add("ContentType", contentType);
-                //HttpResponseMessage response = await client.GetAsync(url);
-                //var result = client.GetAsync(url);
-                //attachmentInfo.FileName
-                //attachmentInfo.FileContent = result.Result.Content["file"];
-            }
+            var response = DownloadDoc(url, token, appId);
             return attachmentInfo;
+        }
+
+        private static async Task<string> DownloadDoc(string url, string token, string appId)
+        {
+            using (var client = new HttpClient())
+                try
+                {
+                    client.DefaultRequestHeaders.Add(appIdHeader, appId);
+                    client.DefaultRequestHeaders.Add("Accept", "application/json");
+                    client.DefaultRequestHeaders.Add("Authorization", token);
+                    client.DefaultRequestHeaders.Add("ContentType", contentType);
+                    var response = await client.GetAsync(url);
+                    return (await response.Content.ReadAsStringAsync());
+                }
+                catch (Exception ex)
+                {
+                    return null;
+                }
         }
 
         public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
@@ -261,8 +250,8 @@ namespace Accela.Web.SDK
                         {
                             List<Result> result = new List<Result>();
                             result = (List<Result>)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
-                            var failedResult = result.Where(r => r.isSuccess == false).Select(r => r).SingleOrDefault();
-                            if (failedResult != null)
+                            int count = (from r in result where r.isSuccess == false select r).Count();
+                            if (count > 0)
                             { 
                                 string message = resultString +  " " + httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
                                 throw new Exception("Request Failed " + message);
