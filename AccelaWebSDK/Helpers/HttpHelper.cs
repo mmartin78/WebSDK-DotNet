@@ -146,7 +146,7 @@ namespace Accela.Web.SDK
 
         public static string HandleWebException(WebException webException, string message)
         {
-            message += " " + webException.Response.Headers[errorResponseHeader] + " Trace Id : " + webException.Response.Headers[traceIdHeader];
+            message += webException.Message + " " + webException.Response.Headers[errorResponseHeader] + " Trace Id : " + webException.Response.Headers[traceIdHeader];
             return message;
         }
 

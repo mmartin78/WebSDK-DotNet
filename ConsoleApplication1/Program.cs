@@ -32,10 +32,9 @@ namespace ConsoleApplication1
             string rId = "BPTMSTR-DUB14-00000-00023";
             string taskId = "1-12714";
 
-            string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
+            //string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
 
-            //string token = "_3m1WrctvYBv3HrA-AQHaDI6YsrPUws2DlqBuUwDISsQeS4CUyEEX8wqKJPoQbjEavivgOuU7JWwTNePLHG4zQ068MhfgXHscZktHlBnP-zs5ho0VqEIg-hgKlTDVsKZP0LJWpiYEWCVrKsuQpN2LVeiWVOVbGtzmFBknvq0rKGoqmScyAgMkLAKsQ9FyaFY8LFUxJqwfRu2Fmn5JHS72rECKg8gG-KGQpy1GbDmXhjqNCQwWwuT2BSVUyD0e8GxhN4hCvBRUFcZ_VmZmDGKjY6GYgHT5P59VPAa6SfZqhnzguZIUTfmcsH1gjqy4DMHiKmnhPn4eKo9b1W_1zx2ybayg6eLlkfnR18VWk4k8v2AlH1cEI28j6wEmgDwZb0onSh9kXYB7rSSGleGa-9n1rldGBD61vLbtjCjwJCT758HKsf9hD9NqITNPbwF2WnW0";
-            
+            string token = "jAMFcai5CZt8yTJhz3XrX1f1bDwoCoO18GY9J-Niln1QuyKo5ef2f6IaEMH594_ftE7D6LiGmeU0vLHVZNv5iSxLV7JGgSDDaz0CXepzGAJPoJp2HgpOC_y74UhDmetd0j3p3orS0kIf0QGkf8Q1IzU3bd7mY4NmNRvSYW9ZHNPvdEjMHQmtH6D-FsidQShmwjuqyS7GiXlwgU07aBcBuckJGBQWykDrYAqhoog4aigFQ8YpMpzlulvnbWdLuU3eq0xjWfwsmMdtVOnisbtBOXSj34j9GtCYFwTx2GbccCN-aw_wKhMWBWe-ZSQafBSzIY5z_7U-z0rSHeP0uHyyYmVbw4AJDbFnd4bfKgRb56Jau9lLn-9uwceXDpYmCvW5pMTIgT6778YJqYmTX_1SP_znRBkciXGdlzTTkp-4EghFL6Q1xVf7Hnd4bPDsPxac0";
             //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
@@ -92,8 +91,8 @@ namespace ConsoleApplication1
             //records = rec.GetRecords(token, null);
             //record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
             //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
-            //Record r1 = rec.CreateRecordInitialize(record, token);
-            //record = rec.GetRecord(r1.id, token);
+            Record r1 = rec.CreateRecordInitialize(record, token);
+            record = rec.GetRecord(r1.id, token);
             //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(record.id, token);
             //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
             //if (file != null)
@@ -104,7 +103,7 @@ namespace ConsoleApplication1
             //}
             //List<Document> docs = rec.GetRecordDocuments(record.id, token);
             //record.contacts = new List<Contact> { new Contact { id = "1234", firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
-            //record = rec.CreateRecordFinalize(record, token);
+            record = rec.CreateRecordFinalize(record, token);
             //contacts = rec.GetRecordContacts(record.id, token);
             //docs = rec.GetRecordDocuments(record.id, token);
 
