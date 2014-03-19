@@ -12,5 +12,6 @@ namespace Accela.Web.SDK
     {
         Document GetDocument(string documentId, string token, string fields = null);
         Stream DownloadDocument(string documentId, string token, string password = null, string userId = null);
+        Task<Stream> DownloadDocumentAsync(string documentId, string token, string password = null, string userId = null);
     }
 }

@@ -92,5 +92,42 @@ namespace Accela.Web.SDK
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Download Record Document :"));
             }
         }
+
+
+        public Task<Stream> DownloadDocumentAsync(string documentId, string token, string password = null, string userId = null)
+        {
+            try
+            {
+                // Validate
+                if (String.IsNullOrWhiteSpace(documentId))
+                {
+                    throw new Exception("Null Document Id provided");
+                }
+                RequestValidator.ValidateToken(token);
+
+                // download document
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("DownloadDocument").Replace("{documentId}", documentId));
+                if (this.language != null || password != null || userId != null)
+                    url.Append("?");
+                if (this.language != null)
+                    url.Append("lang=").Append(this.language).Append("&");
+                if (userId != null)
+                    url.Append("userId=").Append(userId).Append("&");
+                if (password != null)
+                    url.Append("password=").Append(password).Append("&");
+                url = url.Replace("&", "", url.Length - 1, 1);
+
+                var stream = HttpHelper.SendDownloadRequest(url.ToString(), token, this.appId);
+                return stream;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Download Record Document :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Download Record Document :"));
+            }
+        }
     }
 }
