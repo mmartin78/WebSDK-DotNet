@@ -11,9 +11,6 @@ using System.Net.Http;
 
 namespace ConsoleApplication1
 {
-    // Update custom attributes
-    // download doc
-
     class Program
     {
         // Licenses-Animal-Dog-License, Licenses-Animal-Dog-Application
@@ -30,11 +27,10 @@ namespace ConsoleApplication1
             string recordId = "BPTMSTR-DUB14-00000-0002I";
             string documentId = "DUB13-00000-00005-401";
             string rId = "BPTMSTR-DUB14-00000-00023";
-            string taskId = "1-12714";
+            string taskId = "4-12713";
 
-            //string token = "_3m1WrctvYBv3HrA-AQHaH1ObNf-cQBfBOY7__ILN74qN-i4A_QosCExLd4ep7sNC2hFuxI8yVXk0GXZHG8SV5awV2RIospjJLJqjJym-KrYBJPSNqalcZ_gouu_MfM5j2YvqAg7QDnLGPH6wKFx11Wnj7OHjAA57eZC8Uk4vqwXJtQsbfiew8oakkZJm6lt6RC8YZWBVbrK-0m-JnMpo3ofumXgGjXMIQAtr9AmTUGLy9dInLHq1kcDScQG95gEcYw_oZB7nzM-kRdqMfOEfmX3dD_63dELM0gDfgl470HychHv0B5Np77dGU56wHZE1wbf4QmBjVkSEh7xho12gCaSThnsDiAgaYkNltrqnXpUx_2LLbvcFW1Hs_bDSyil7uVqGQsxlc7Lvh2gs2_fGdzDZYhehXYKsP51PpdzTxjBplQLdLwOW60WxpzoActmo9aJQ7B76BaFIWzR7Q3-zz9PuNrC2xlnj0RSgjN-zkWBK94UF__-NxNKZfCvHZ1-tZghy7urt4f_2EgMIVoUjUOrJoEM26wBC_rOllWsSz41";
+            string token = "rCh5v80yUoKQNGwsUuaN3RmmId9KbQGqCflQ5lBJ0cZEn9YBQn5e7XI5PGQQR8UP_wGnSllXAwqTxyW242teExjHUmUsbj7xDgXpdVjJOk9AgNqFI9-Kc4fPL1z1U5KzI-zgbtC9yfdFWA0uHM4MwKMzcpOkwE6L7ZY-Xb4NbIDzSbSOIm8NJMAfbOn959xRJGVY8qTYQOX9I3ttFSNTF10CwBdfptgeGlOY89bCwlsF-wlpVgRJMbK74c8WL0C5H4Bsgf8WLkncFXx2ZTGn3NVonzJqBs4l7TA08zwbGdQv5h6N2eW8TkKo-KBBPVsvK-is1wZKf9EnU5lcoS213NO1gQS_aXl75U1mz4eC0Q-OG4VMmGStjQZqBIoT-bAnwG0urwRtHeEHtjTRNuiBCohHeqlvgxGQw-2MjZdnNyn_fYo10mfXEQLZcGWV4Qylb9iCckzCQQaEdDPHNXD0ZmB1ZGTK2ltKuOnH2bODLRoM1pt2XHLgJdX-GHC0cQ_iCpF3modra5YAVsy3CVUgyMIKz-_f21hkZE0Ja-5gz7Q1";
 
-            string token = "jAMFcai5CZt8yTJhz3XrX1f1bDwoCoO18GY9J-Niln1QuyKo5ef2f6IaEMH594_ftE7D6LiGmeU0vLHVZNv5iSxLV7JGgSDDaz0CXepzGAJPoJp2HgpOC_y74UhDmetd0j3p3orS0kIf0QGkf8Q1IzU3bd7mY4NmNRvSYW9ZHNPvdEjMHQmtH6D-FsidQShmwjuqyS7GiXlwgU07aBcBuckJGBQWykDrYAqhoog4aigFQ8YpMpzlulvnbWdLuU3eq0xjWfwsmMdtVOnisbtBOXSj34j9GtCYFwTx2GbccCN-aw_wKhMWBWe-ZSQafBSzIY5z_7U-z0rSHeP0uHyyYmVbw4AJDbFnd4bfKgRb56Jau9lLn-9uwceXDpYmCvW5pMTIgT6778YJqYmTX_1SP_znRBkciXGdlzTTkp-4EghFL6Q1xVf7Hnd4bPDsPxac0";
             //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
             //IAgency a = new AgencyHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
@@ -47,8 +43,16 @@ namespace ConsoleApplication1
 
             //RecordFilter f = new RecordFilter { status = new Status { value = "In Review" }, type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "Application" }, openedDate = "02/27/2014", endOpenedDate = "03/10/2014" };
             //RecordFilter f = new RecordFilter { type = new RecordType { module = "Licenses", group = "Licenses", type = "Animal", category = "License" }};
-            //RecordFilter f = new RecordFilter { module = "Licenses" };
-            //ResultDataPaged<Record> records = rec.SearchRecords(token, f);
+            RecordFilter f = new RecordFilter { customId = "PETA14-00095" };
+            ResultDataPaged<Record> records = rec.SearchRecords(token, f);
+            Record record = ((Record)records.Data.First());
+            //record.name = "Bubba";
+            //record.description = "Bubba";
+            //record = rec.UpdateRecordDetail(record, token);
+            //List<RecordFees> fee = rec.GetRecordFees(record.id, token);
+            //List<RelatedRecord> rr = rec.GetRelatedRecords(record.id, token);
+
+
 
             // Contact
             //List<ContactType> ct = con.GetContactTypes(token, "Licenses");
@@ -59,40 +63,40 @@ namespace ConsoleApplication1
             //AttachmentInfo att = a.GetAgencyLogo(token, "BPTMSTR"); // 404 Not found
 
             // Record Contact
-            //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(rId, token);
-            //List<Contact> cs = new List<Contact> { 
-            //    new Contact { isPrimary = "N", businessName = "test",
-            //        firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", 
-            //        address = new ContactAddress { addressLine1 = "500 San Blvd", city = "San Ramon", state = new State { value = "CA" },
-            //        postalCode = "94566" },
-            //        type = new ContactType { value = "Pet Owner" } },
-            //new Contact()};
+           //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(recordId, token);
+           //List<Contact> cs = new List<Contact> { 
+           //     new Contact { isPrimary = "N", businessName = "test",
+           //         firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", 
+           //         address = new ContactAddress { addressLine1 = "500 San Blvd", city = "San Ramon", state = new State { value = "CA" },
+           //         postalCode = "94566" },
+           //         type = new ContactType { value = "Pet Owner" } }};
 
-            //rec.CreateRecordContact(cs, rId, token);
-            //contacts = rec.GetRecordContacts(rId, token);
-            //Contact c = ((List<Contact>)contacts.Data)[0];
-            //c.type.text = null;
-            //rec.DeleteRecordContact(c.id, rId, token);
-            //c.middleName = "tseting";
-            //c = rec.UpdateRecordContact(c, rId, token);
-            //contacts = rec.GetRecordContacts(rId, token);
+           //rec.CreateRecordContact(cs, recordId, token);
+           //contacts = rec.GetRecordContacts(recordId, token);
+           //Contact c = ((List<Contact>)contacts.Data)[0];
+           //c.type.text = null;
+           //c.middleName = "tseting";
+           //c = rec.UpdateRecordContact(c, recordId, token);
+           //contacts = rec.GetRecordContacts(recordId, token);
+           //rec.DeleteRecordContact(c.id, rId, token);
+           //contacts = rec.GetRecordContacts(recordId, token);
 
             // Address
             //List<Country> cn = ad.GetCountries(token);
             //List<State> s = ad.GetStates(token);
 
             // Records
-            Record record = rec.GetRecord(recordId, token);
+            //Record record = rec.GetRecord(recordId, token);
             //record.name = "Test Test";
             //record.description = "Test Test";
             //record = rec.UpdateRecordDetail(record, token);
             //record = rec.GetRecord(recordId, token);
-            //ResultDataPaged<Record> records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "Application" }, contact = new Contact { firstName = "Sam" } }, null);
+            //records = rec.SearchRecords(token, new RecordFilter { type = new RecordType { category = "Application" }, contact = new Contact { firstName = "Sam" } }, null);
             //records = rec.GetRecords(token, null);
             //record = new Record { type = new RecordType { id = "Licenses-Animal-Pig-Application" } };
             //record.contacts = new List<Contact> { new Contact { firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet.cOwner" } } };
-            Record r1 = rec.CreateRecordInitialize(record, token);
-            record = rec.GetRecord(r1.id, token);
+            //Record r1 = rec.CreateRecordInitialize(record, token);
+            //record = rec.GetRecord(r1.id, token);
             //ResultDataPaged<Contact> contacts = rec.GetRecordContacts(record.id, token);
             //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
             //if (file != null)
@@ -103,18 +107,18 @@ namespace ConsoleApplication1
             //}
             //List<Document> docs = rec.GetRecordDocuments(record.id, token);
             //record.contacts = new List<Contact> { new Contact { id = "1234", firstName = "Swapnali", lastName = "Dembla", email = "sdembla@accela.com", type = new ContactType { value = "Pet Owner" } } };
-            record = rec.CreateRecordFinalize(record, token);
+            //record = rec.CreateRecordFinalize(record, token);
             //contacts = rec.GetRecordContacts(record.id, token);
             //docs = rec.GetRecordDocuments(record.id, token);
 
             // Documents
             //List<DocumentType> d = rec.GetRecordDocumentTypes(recordId, token);
-            List<Document> docs = rec.GetRecordDocuments(recordId, token);
-            Stream s = doc.DownloadDocument("942", token);
-            using (FileStream fs = new FileStream(@"C:\Swapnali\TestPurposes\Doggy.jpeg", FileMode.Create)) 
-            {
-                s.CopyTo(fs);
-            }
+            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            //Stream sr = doc.DownloadDocument("1132", token);
+            //using (FileStream fs = new FileStream(@"C:\Swapnali\TestPurposes\photo.jpeg", FileMode.Create)) 
+            //{
+            //    sr.CopyTo(fs);
+            //}
 
             //FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
             //if (file != null)
@@ -124,28 +128,31 @@ namespace ConsoleApplication1
             //    rec.CreateRecordDocument(at, recordId, token, "ooo");
             //}
             //rec.DeleteRecordDocument("1012", recordId, token);
-            //List<Document> docs = rec.GetRecordDocuments(recordId, token);
+            //docs = rec.GetRecordDocuments(recordId, token);
 
             // Status
             //List<Status> s = rec.GetRecordStatuses("Licenses-Animal-Pig-Application", token);
 
             //// Workflow
-            //List<WorkflowTask> w2 = rec.GetWorkflowTasks(recordId, token);
-            //WorkflowTask w = rec.GetWorkflowTask(recordId, taskId, token);
-            //UpdateWorkflowTaskRequest uw = new UpdateWorkflowTaskRequest { comment = "testing", status = new Status { value = "Issued" } };
-            //w = rec.UpdateWorkflowTask(recordId, taskId, uw, token);
+            List<WorkflowTask> w2 = rec.GetWorkflowTasks(record.id, token);
+            WorkflowTask w = rec.GetWorkflowTask(record.id, taskId, token);
+            UpdateWorkflowTaskRequest uw = new UpdateWorkflowTaskRequest { comment = "testing", status = new Status { value = "Issued" } };
+            w = rec.UpdateWorkflowTask(record.id, taskId, uw, token);
 
             // Fees
             //List<RecordFees> fs = rec.GetRecordFees(recordId, token);
 
             // Custom Fields
             List<Dictionary<string, string>> cf = rec.GetRecordCustomFields(recordId, token);
-            List<Dictionary<string, string>> cfs = new List<Dictionary<string, string>>();
-            Dictionary<string, string> val = new Dictionary<string,string>();
-            val.Add("id", "LIC_DOG_LIC-GENERAL.cINFORMATION");
-            val.Add("Name", "Woofy");
-            cfs.Add(val);
-            rec.UpdateRecordCustomFields(recordId, cfs, token);
+            Dictionary<string, string> temp = cf[0];
+            temp["Pet Name"] = "Toffy";
+            //List<Dictionary<string, string>> cfs = new List<Dictionary<string, string>>();
+            //Dictionary<string, string> val = new Dictionary<string,string>();
+            //val.Add("id", "LIC_DOG_LIC-GENERAL.cINFORMATION");
+            //val.Add("Name", "Woofy");
+            //cfs.Add(val);
+            rec.UpdateRecordCustomFields(recordId, cf, token);
+            cf = rec.GetRecordCustomFields(recordId, token);
         }
     }
 }

@@ -195,11 +195,12 @@ namespace Accela.Web.SDK.Models
 
     public class RelatedRecord
     {
+        public string id {get; set; }
         public string relationship { get; set; }
-        public string recordId { get; set; }
         public string customId { get; set; }
+        public string trackingId { get; set; }
         public string serviceProveCode { get; set; }
-        public string type { get; set; }
+        public RecordType type { get; set; }
     }
 
     public class Record
