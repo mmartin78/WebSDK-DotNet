@@ -106,5 +106,9 @@ namespace Accela.Web.SDK.Models
         public PreferredChannel preferredChannel { get; set; }
         public BirthCity birthCity { get; set; }
         public BirthRegion birthRegion { get; set; }
+
+        public string GetFullName() {
+            return string.Format("{0} {1}", this.firstName, this.lastName);
+        }
     }
 }
