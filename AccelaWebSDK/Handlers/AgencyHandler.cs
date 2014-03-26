@@ -1,5 +1,6 @@
 ﻿using Accela.Web.SDK.Models;
 using System;
+using System.IO;
 using System.Net;
 
 namespace Accela.Web.SDK
