@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Accela.Web.SDK;
+﻿using Accela.Web.SDK.Contracts;
 using Accela.Web.SDK.Models;
-using System.Net.Http;
+using System;
 using System.Net;
-using System.Web;
-using System.IO;
 
 namespace Accela.Web.SDK
 {
     public class AgencyHandler : BaseHandler, IAgency
     {
-        public AgencyHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
-
-        public AgencyHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+        public AgencyHandler(string appId, string appSecret, ApplicationType appType, string language, IConfigurationProvider configManager)
+            : base(appId, appSecret, appType, language, configManager)
+        {
+        }
 
         public Agency GetAgency(string token, string agencyName)
         {

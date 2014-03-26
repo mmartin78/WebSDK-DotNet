@@ -10,14 +10,16 @@ using System.Net;
 using System.Web;
 using System.IO;
 using Newtonsoft.Json;
+using Accela.Web.SDK.Contracts;
 
 namespace Accela.Web.SDK
 {
     public class RecordHandler : BaseHandler, IRecord
     {
-        public RecordHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
-
-        public RecordHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+        public RecordHandler(string appId, string appSecret, ApplicationType appType, string language, IConfigurationProvider configManager)
+            : base(appId, appSecret, appType, language, configManager)
+        {
+        }
 
         #region Related Records
         public List<RelatedRecord> GetRelatedRecords(string recordId, string token, string relationship = null, string fields = null)

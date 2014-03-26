@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Accela.Web.SDK.Contracts;
 using Accela.Web.SDK.Models;
-using Accela.Web.SDK;
-using System.Net.Http;
+using System;
 using System.Net;
+using System.Text;
 using System.Web;
 
 namespace Accela.Web.SDK
 {
     public class AuthHandler : BaseHandler, IAuth
     {
-        public AuthHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
-
-        public AuthHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { } 
+        public AuthHandler(string appId, string appSecret, ApplicationType appType, string language, IConfigurationProvider configManager)
+            : base(appId, appSecret, appType, language, configManager)
+        {
+        }
 
         public Token GetToken(string redirectUrl, string code)
         {
@@ -27,7 +24,7 @@ namespace Accela.Web.SDK
 
             // Build Request
             Token token = new Token();
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(ConfigurationReader.GetValue("TokenExchangeURL"));
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.ConfigProvider.GetValue("Accela.WebSDK.OAuth.TokenExchangeUrlTokenExchangeURL"));
             request.ContentType = "application/x-www-form-urlencoded";
             request.Headers.Add(ConfigurationReader.GetValue("HAppId"), this.appId);
 
@@ -121,7 +118,7 @@ namespace Accela.Web.SDK
 
             // Build Auth Request
             StringBuilder requestString = new StringBuilder(ConfigurationReader.GetValue("AuthenticationRequest"));
-            requestString = requestString.Replace("{authUrl}", ConfigurationReader.GetValue("AuthenticationURL"));
+            requestString = requestString.Replace("{authUrl}", this.ConfigProvider.GetValue("Accela.WebSDK.OAuth.AuthenticationUrl"));
             requestString = requestString.Replace("{appId}", this.appId);
             requestString = requestString.Replace("{agency}", agencyName);
             requestString = requestString.Replace("{agencyEnvironment}", agencyEnvironment);

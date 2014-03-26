@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Accela.Web.SDK.Contracts;
 using Accela.Web.SDK.Models;
+using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Text;
 
 namespace Accela.Web.SDK
 {
     public class ContactHandler : BaseHandler, IContact
     {
-         public ContactHandler(string appId, string appSecret, ApplicationType appType) : base(appId, appSecret, appType) { }
-
-         public ContactHandler(string appId, string appSecret, ApplicationType appType, string language) : base(appId, appSecret, appType, language) { }
+        public ContactHandler(string appId, string appSecret, ApplicationType appType, string language, IConfigurationProvider configManager)
+            : base(appId, appSecret, appType, language, configManager)
+        {
+        }
 
          public ResultDataPaged<Contact> SearchContacts(string token, ContactFilter filter, int offset = -1, int limit = -1)
          {
