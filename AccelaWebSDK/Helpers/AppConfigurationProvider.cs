@@ -1,5 +1,4 @@
-﻿using Accela.Web.SDK.Contracts;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace Accela.Web.SDK
 {

@@ -1,16 +1,9 @@
-﻿using System;
+﻿using Accela.Web.SDK.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Accela.Web.SDK;
-using Accela.Web.SDK.Models;
-using System.Net.Http;
 using System.Net;
-using System.Web;
-using System.IO;
-using Newtonsoft.Json;
-using Accela.Web.SDK.Contracts;
+using System.Text;
 
 namespace Accela.Web.SDK
 {

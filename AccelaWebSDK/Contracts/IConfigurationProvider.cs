@@ -1,4 +1,4 @@
-﻿namespace Accela.Web.SDK.Contracts
+﻿namespace Accela.Web.SDK
 {
     public interface IConfigurationProvider
     {

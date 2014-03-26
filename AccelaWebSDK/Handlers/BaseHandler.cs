@@ -1,5 +1,4 @@
-﻿using Accela.Web.SDK.Contracts;
-using Accela.Web.SDK.Models;
+﻿using Accela.Web.SDK.Models;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
