@@ -828,24 +828,33 @@ namespace Accela.Web.SDK
                 {
                     case "initial":
                         url.Append(apiUrl + ConfigurationReader.GetValue("CreatePartialRecord"));
+                        if (this.language != null || isFeeEstimate != null)
+                            url.Append("?");
+                        if (this.language != null)
+                            url.Append("lang=").Append(this.language);
+                        if (this.language != null && isFeeEstimate != null)
+                            url.Append("&");
+                        if (isFeeEstimate != null)
+                            url.Append("isFeeEstimate=").Append(isFeeEstimate);
                         break;
                     case "final":
-                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateFinalRecord"));
+                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateFinalRecord").Replace("{recordId}", record.id));
+                        if (this.language != null)
+                            url.Append("?lang=").Append(this.language);
                         break;
                     case "":
                         url.Append(apiUrl + ConfigurationReader.GetValue("CreateRecord"));
+                        if (this.language != null)
+                            url.Append("?lang=").Append(this.language);
                         break;
                 }
-                if (this.language != null || isFeeEstimate != null)
-                    url.Append("?");
-                if (this.language != null)
-                    url.Append("lang=").Append(this.language);
-                if (this.language != null && isFeeEstimate != null)
-                    url.Append("&");
-                if (isFeeEstimate != null)
-                    url.Append("isFeeEstimate=").Append(isFeeEstimate);
 
-                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
+
+                RESTResponse response = null;
+                if (type.Equals("final"))
+                    response = HttpHelper.SendPostRequest(url.ToString(), null, token, this.appId);
+                else
+                    response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
 
                 // Response
                 Record responseRecord = new Record();
