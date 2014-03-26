@@ -178,24 +178,25 @@ namespace Accela.Web.SDK
                 StringBuilder url = new StringBuilder(apiUrl);
                 if (this.appType == ApplicationType.Agency)
                 {
-                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
-                    if (!string.IsNullOrEmpty(filter))
-                        url.Append("&").Append(filter);
-                    if (this.language != null)
-                        url.Append("&lang=").Append(this.language);
+                    url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
                 }
                 else if (this.appType == ApplicationType.Citizen)
                 {
-                    url = url.Append(ConfigurationReader.GetValue("GetMyRecords"));
+                    url = url.Append(ConfigurationReader.GetValue("GetMyRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
                 }
+                if (!string.IsNullOrEmpty(filter))
+                    url.Append("&").Append(filter);
+                if (this.language != null)
+                    url.Append("&lang=").Append(this.language);
 
                 // get records
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
-                PaginationInfo paginationInfo = null;
+                PaginationInfo paginationInfo = new PaginationInfo { hasmore = false, offset = offset, limit = limit };
 
                 // create response
-                List<Record> records = new List<Record>();
-                records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                //List<Record> records = new List<Record>();
+                //records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                var records = HttpHelper.ConvertToSDKResponse<List<Record>>(response, ref paginationInfo);
                 ResultDataPaged<Record> results = new ResultDataPaged<Record> { Data = records, PageInfo = paginationInfo };
                 return results;
             }
@@ -300,7 +301,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public Result CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null)
+        public List<Result> CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null)
         {
             try
             {
@@ -326,8 +327,8 @@ namespace Accela.Web.SDK
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), contacts, token, this.appId);
 
                 // create response
-                Result result = new Result();
-                return (Result)HttpHelper.ConvertToSDKResponse(result, response);
+                List<Result> result = new List<Result>();
+                return (List<Result>)HttpHelper.ConvertToSDKResponse(result, response);
 
             }
             catch (WebException webException)
@@ -822,24 +823,33 @@ namespace Accela.Web.SDK
                 {
                     case "initial":
                         url.Append(apiUrl + ConfigurationReader.GetValue("CreatePartialRecord"));
+                        if (this.language != null || isFeeEstimate != null)
+                            url.Append("?");
+                        if (this.language != null)
+                            url.Append("lang=").Append(this.language);
+                        if (this.language != null && isFeeEstimate != null)
+                            url.Append("&");
+                        if (isFeeEstimate != null)
+                            url.Append("isFeeEstimate=").Append(isFeeEstimate);
                         break;
                     case "final":
-                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateFinalRecord"));
+                        url.Append(apiUrl + ConfigurationReader.GetValue("CreateFinalRecord").Replace("{recordId}", record.id));
+                        if (this.language != null)
+                            url.Append("?lang=").Append(this.language);
                         break;
                     case "":
                         url.Append(apiUrl + ConfigurationReader.GetValue("CreateRecord"));
+                        if (this.language != null)
+                            url.Append("?lang=").Append(this.language);
                         break;
                 }
-                if (this.language != null || isFeeEstimate != null)
-                    url.Append("?");
-                if (this.language != null)
-                    url.Append("lang=").Append(this.language);
-                if (this.language != null && isFeeEstimate != null)
-                    url.Append("&");
-                if (isFeeEstimate != null)
-                    url.Append("isFeeEstimate=").Append(isFeeEstimate);
 
-                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
+
+                RESTResponse response = null;
+                if (type.Equals("final"))
+                    response = HttpHelper.SendPostRequest(url.ToString(), null, token, this.appId);
+                else
+                    response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
 
                 // Response
                 Record responseRecord = new Record();

@@ -10,6 +10,8 @@ using System.Configuration;
 using System.Resources;
 using System.Net.Http;
 using Accela.Web.SDK.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Accela.Web.SDK
 {
@@ -64,22 +66,6 @@ namespace Accela.Web.SDK
             {
                 using (var content = new MultipartFormDataContent())
                 {
-                    //FileInfo file = null;
-
-                    //file = new FileInfo(documentPath);
-                    //if (file != null)
-                    //{
-                    //    StreamContent fileContent = new StreamContent(file.OpenRead());
-                    //    content.Add(fileContent, "\"file\"", "\"" + file.Name + "\"");
-                    //    content.Add(new StringContent(GetFileInfo(documentPath, description)), "\"fileInfo\"");
-
-                    //    client.DefaultRequestHeaders.Add(appIdHeader, appId);
-                    //    client.DefaultRequestHeaders.Add("Accept", "application/json");
-                    //    client.DefaultRequestHeaders.Add("Authorization", token);
-                    //    var result = client.PostAsync(url, content).Result;
-                    //    return (string)result.Content.ReadAsStringAsync().Result;
-                    //}
-
                     if (attachmentInfo.FileContent != null)
                     {
                         string fileInfo = GetFileInfo(attachmentInfo);
@@ -111,40 +97,25 @@ namespace Accela.Web.SDK
             return ReceiveRESTResponse(httpRequest);
         }
 
-        public static AttachmentInfo SendDownloadRequest(string url, AttachmentInfo attachmentInfo, string token, string appId)
+        public static async Task<Stream> SendDownloadRequest(string url, string token, string appId)
         {
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.Method = "GET";
-            //request.ContentType = contentType;
-            //request.Accept = accept;
-            //request.Headers.Add(appIdHeader, appId);
-            //request.Headers.Add("Authorization", token);
-            //var httpResponse = (HttpWebResponse)request.GetResponse();
+            return await DownloadDoc(url, token, appId);
+        }
 
-            // Receive
-            //using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            //{
-            //    //attachmentInfo.FileContent = streamReader.BaseStream.;
-            //    attachmentInfo.FileType = httpResponse.Headers["Content-Type"];
-            //    if (httpResponse.Headers["Content-Disposition"] != null)
-            //    {
-            //        string[] tmp = httpResponse.Headers["Content-Disposition"].Split('"');
-            //        if (tmp != null && tmp.Length > 2)
-            //            attachmentInfo.FileName = tmp[1];
-            //    }
-            //}
-
+        private static async Task<Stream> DownloadDoc(string url, string token, string appId)
+        {
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add(appIdHeader, appId);
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
                 client.DefaultRequestHeaders.Add("Authorization", token);
                 client.DefaultRequestHeaders.Add("ContentType", contentType);
-                var result = client.GetAsync(url);
-                //attachmentInfo.FileName
-                //attachmentInfo.FileContent = result.Result.Content["file"];
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    return response.Content.ReadAsStreamAsync().Result;
+                }
             }
-            return attachmentInfo;
+            return null;
         }
 
         public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
@@ -175,7 +146,7 @@ namespace Accela.Web.SDK
 
         public static string HandleWebException(WebException webException, string message)
         {
-            message += " " + webException.Response.Headers[errorResponseHeader] + " Trace Id : " + webException.Response.Headers[traceIdHeader];
+            message += webException.Message + " " + webException.Response.Headers[errorResponseHeader] + " Trace Id : " + webException.Response.Headers[traceIdHeader];
             return message;
         }
 
@@ -200,6 +171,17 @@ namespace Accela.Web.SDK
             return null;
         }
 
+        public static T ConvertToSDKResponse<T>(RESTResponse response, ref PaginationInfo paginationInfo)
+        {
+            if (response != null && response.Result != null)
+            {
+                paginationInfo = response.Page;
+                return ConvertToSDKResponse<T>(response);
+            }
+            //paginationInfo = new PaginationInfo { hasmore = false, limit = 0, offset = 0 };
+            return default(T);
+        }
+
         public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response)
         {
             if (response != null && response.Result != null && (response.Status == 200 || response.Status == 0))
@@ -207,6 +189,15 @@ namespace Accela.Web.SDK
                 return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
             }
             return null;
+        }
+
+        public static T ConvertToSDKResponse<T>(RESTResponse response)
+        {
+            if (response != null && response.Result != null && (response.Status == 200 || response.Status == 0))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response.Result.ToString());
+            }
+            return default(T);
         }
 
         #region private methods
@@ -253,14 +244,19 @@ namespace Accela.Web.SDK
                         message += httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
                         throw new Exception(message);
                     }
-                    else if (response.Status == 200 && response.Result != null && response.Result.ToString().Contains("failedCount"))
+                    else if (response.Status == 200 && response.Result != null)
                     {
-                        Result result = new Result();
-                        result = (Result)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
-                        if (result.failedCount > 0)
+                        string resultString = response.Result.ToString();
+                        if (resultString.Contains("code") && resultString.Contains("isSuccess"))
                         {
-                            string message = httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
-                            throw new Exception("Request Failed " + message);
+                            List<Result> result = new List<Result>();
+                            result = (List<Result>)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
+                            int count = (from r in result where r.isSuccess == false select r).Count();
+                            if (count > 0)
+                            { 
+                                string message = resultString +  " " + httpResponse.Headers[errorResponseHeader] + " Trace Id : " + httpResponse.Headers[traceIdHeader];
+                                throw new Exception("Request Failed " + message);
+                            }
                         }
                     }
                 }

@@ -27,7 +27,7 @@ namespace Accela.Web.SDK
 
         // Record Contacts
         ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, string fields = null, int offset = -1, int limit = -1);
-        Result CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null);
+        List<Result> CreateRecordContact(List<Contact> contacts, string recordId, string token, string fields = null);
         Contact UpdateRecordContact(Contact contact, string recordId, string token, string fields = null);
         void DeleteRecordContact(string contactId, string recordId, string token, string fields = null);
 

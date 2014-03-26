@@ -41,7 +41,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public AttachmentInfo GetAgencyLogo(string token, string agencyName)
+        public Stream GetAgencyLogo(string token, string agencyName)
         {
             try
             {
@@ -54,9 +54,8 @@ namespace Accela.Web.SDK
 
                 // get agency logo
                 string url = apiUrl + ConfigurationReader.GetValue("GetAgencyLogo").Replace("{name}", agencyName);
-                AttachmentInfo attachmentInfo = null;
-                attachmentInfo = HttpHelper.SendDownloadRequest(url, attachmentInfo, token, this.appId);
-                return attachmentInfo;
+                var stream = HttpHelper.SendDownloadRequest(url, token, this.appId);
+                return stream.Result;
             }
             catch (WebException webException)
             {
