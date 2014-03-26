@@ -196,11 +196,12 @@ namespace Accela.Web.SDK
 
                 // get records
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
-                PaginationInfo paginationInfo = null;
+                PaginationInfo paginationInfo = new PaginationInfo { hasmore = false, offset = offset, limit = limit };
 
                 // create response
-                List<Record> records = new List<Record>();
-                records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                //List<Record> records = new List<Record>();
+                //records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                var records = HttpHelper.ConvertToSDKResponse<List<Record>>(response, ref paginationInfo);
                 ResultDataPaged<Record> results = new ResultDataPaged<Record> { Data = records, PageInfo = paginationInfo };
                 return results;
             }

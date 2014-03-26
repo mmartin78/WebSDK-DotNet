@@ -58,6 +58,7 @@ namespace Accela.Web.SDK.Models
         public string department { get; set; }
         public string entityID { get; set; }
         public string fileName { get; set; }
+        public string fileType { get; set; }
         public string type { get; set; }
         public string uploadedBy { get; set; }
         public double size { get; set; }

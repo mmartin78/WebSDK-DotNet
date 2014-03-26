@@ -171,6 +171,17 @@ namespace Accela.Web.SDK
             return null;
         }
 
+        public static T ConvertToSDKResponse<T>(RESTResponse response, ref PaginationInfo paginationInfo)
+        {
+            if (response != null && response.Result != null)
+            {
+                paginationInfo = response.Page;
+                return ConvertToSDKResponse<T>(response);
+            }
+            //paginationInfo = new PaginationInfo { hasmore = false, limit = 0, offset = 0 };
+            return default(T);
+        }
+
         public static Object ConvertToSDKResponse(Object toReturn, RESTResponse response)
         {
             if (response != null && response.Result != null && (response.Status == 200 || response.Status == 0))
@@ -178,6 +189,15 @@ namespace Accela.Web.SDK
                 return Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), toReturn.GetType());
             }
             return null;
+        }
+
+        public static T ConvertToSDKResponse<T>(RESTResponse response)
+        {
+            if (response != null && response.Result != null && (response.Status == 200 || response.Status == 0))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response.Result.ToString());
+            }
+            return default(T);
         }
 
         #region private methods
