@@ -26,7 +26,7 @@ namespace Accela.Web.SDK.Models
 
     public class Result
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string code { get; set; }
         public string message { get; set; }
         public bool isSuccess { get; set; }

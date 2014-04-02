@@ -37,7 +37,8 @@ namespace Accela.Web.SDK
             this.appId = appId;
             this.appSecret = appSecret;
             this.appType = appType;
-            this.language = lang;
+            if (!string.IsNullOrEmpty(lang))
+                this.language = lang;
         }
     }
 }

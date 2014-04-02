@@ -52,6 +52,7 @@
     <Compile Include="Contracts\IConfigurationProvider.cs" />
     <Compile Include="Contracts\IContact.cs" />
     <Compile Include="Contracts\IDocument.cs" />
+    <Compile Include="Contracts\IPayment.cs" />
     <Compile Include="Contracts\IRecord.cs" />
     <Compile Include="Handlers\AddressHandler.cs" />
     <Compile Include="Handlers\AgencyHandler.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Handlers\BaseHandler.cs" />
     <Compile Include="Handlers\ContactHandler.cs" />
     <Compile Include="Handlers\DocumentHandler.cs" />
+    <Compile Include="Handlers\PaymentHandler.cs" />
     <Compile Include="Handlers\RecordHandler.cs" />
     <Compile Include="Helpers\AppConfigurationProvider.cs" />
     <Compile Include="Helpers\HttpHelper.cs" />
@@ -69,13 +71,13 @@
     <Compile Include="Models\Agency.cs" />
     <Compile Include="Models\ApplicationType.cs" />
     <Compile Include="Models\AttachmentInfo.cs" />
-    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\CurrentUserProfile.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\BaseTextValue.cs" />
     <Compile Include="Models\Owner.cs" />
     <Compile Include="Models\Parcel.cs" />
+    <Compile Include="Models\PaymentInfo.cs" />
     <Compile Include="Models\Professional.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\CustomFields.cs" />
