@@ -75,6 +75,7 @@
     <Compile Include="Models\CurrentUserProfile.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\BaseTextValue.cs" />
+    <Compile Include="Models\FeeSchedule.cs" />
     <Compile Include="Models\Owner.cs" />
     <Compile Include="Models\Parcel.cs" />
     <Compile Include="Models\PaymentInfo.cs" />

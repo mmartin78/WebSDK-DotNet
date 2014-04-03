@@ -55,7 +55,7 @@ namespace Accela.Web.SDK.Models
 
     public class PaymentResult
     {
-        public string entityID { get; set; }
+        public string entityId { get; set; }
         public string entityType { get; set; }
         public string returnCode { get; set; }
         public string returnMessage { get; set; }

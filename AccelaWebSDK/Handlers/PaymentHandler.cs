@@ -26,7 +26,7 @@ namespace Accela.Web.SDK
                     throw new Exception("Null payment information provided");
                 }
 
-                // get record summary
+                // make payment
                 string url = apiUrl + ConfigurationReader.GetValue("Payment");
                 if (this.language != null)
                     url += "?lang=" + this.language;
@@ -44,6 +44,44 @@ namespace Accela.Web.SDK
             catch (Exception exception)
             {
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Make Payment :"));
+            }
+        }
+
+        public List<FeeSchedule> GetFeeSchedule(string token, string feeScheduleId, string fields = null, string version = null)
+        {
+            try
+            {
+                // Validate
+                RequestValidator.ValidateToken(token);
+                if (string.IsNullOrEmpty(feeScheduleId))
+                {
+                    throw new Exception("Null Fee Schedule Id provided");
+                }
+
+                // get fee schedule
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetFeeSchedule").Replace("{schedule}", feeScheduleId));
+
+                if (this.language != null)
+                    url.Append("&lang=").Append(this.language);
+                if (fields != null)
+                    url.Append("&fields=").Append(fields);
+                if (version != null)
+                    url.Append("&version=").Append(version);
+
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, appId);
+
+                // create response
+                List<FeeSchedule> feeSchedule = new List<FeeSchedule>();
+                feeSchedule = (List<FeeSchedule>)HttpHelper.ConvertToSDKResponse(feeSchedule, response);
+                return feeSchedule;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in getting fee schedule :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in getting fee schedule :"));
             }
         }
     }

@@ -11,5 +11,6 @@ namespace Accela.Web.SDK
     public interface IPayment
     {
         PaymentResult MakePayment(string token, PaymentInfo paymentInfo);
+        List<FeeSchedule> GetFeeSchedule(string token, string feeScheduleId, string fields = null, string version = null);
     }
 }
