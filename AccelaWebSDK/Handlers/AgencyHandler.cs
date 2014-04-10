@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Net;
+using System.Collections.Generic;
 
 namespace Accela.Web.SDK
 {
@@ -10,6 +11,32 @@ namespace Accela.Web.SDK
         public AgencyHandler(string appId, string appSecret, ApplicationType appType, string language, IConfigurationProvider configManager)
             : base(appId, appSecret, appType, language, configManager)
         {
+        }
+
+        public List<Agency> GetAgencies(string token)
+        {
+            try
+            {
+                // Validate
+                RequestValidator.ValidateToken(token);
+
+                // get agency
+                string url = apiUrl + ConfigurationReader.GetValue("GetAgencies");
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+
+                // create response
+                List<Agency> agency = new List<Agency>();
+                agency = (List<Agency>)HttpHelper.ConvertToSDKResponse(agency, response);
+                return agency;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Agency :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Agency :"));
+            }
         }
 
         public Agency GetAgency(string token, string agencyName)

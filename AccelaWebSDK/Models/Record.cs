@@ -74,6 +74,17 @@ namespace Accela.Web.SDK.Models
         public string group { get; set; }
     }
 
+    public class ExpirationStatus
+    {
+        public string value { get; set; }
+    }
+
+    public class RenewalInfo
+    {
+        public ExpirationStatus expirationStatus { get; set; }
+        public string expirationDate { get; set; }
+    }
+
     public class RecordDetail
     {
         public string serviceProviderCode { get; set; }
@@ -118,6 +129,7 @@ namespace Accela.Web.SDK.Models
         public Status status { get; set; }
         public int estimatedProductionUnit { get; set; }
         public int actualProductionUnit { get; set; }
+        public RenewalInfo renewalInfo { get; set; }
     }
 
     public class RecordFilter
@@ -272,6 +284,7 @@ namespace Accela.Web.SDK.Models
         public string initiatedProduct { get; set; }
         public List<Parcel> parcels { get; set; }
         public string inspectorId { get; set; }
+        public RenewalInfo renewalInfo { get; set; }
 
         public void ValidateRecordForCreate()
         {

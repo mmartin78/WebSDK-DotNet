@@ -59,7 +59,7 @@ namespace Accela.Web.SDK
                 }
 
                 // get fee schedule
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetFeeSchedule").Replace("{schedule}", feeScheduleId));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetFeeScheule").Replace("{scheduleId}", feeScheduleId));
 
                 if (this.language != null)
                     url.Append("&lang=").Append(this.language);
@@ -71,9 +71,9 @@ namespace Accela.Web.SDK
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, appId);
 
                 // create response
-                List<FeeSchedule> feeSchedule = new List<FeeSchedule>();
-                feeSchedule = (List<FeeSchedule>)HttpHelper.ConvertToSDKResponse(feeSchedule, response);
-                return feeSchedule;
+                List<FeeSchedule> feeSchedules = new List<FeeSchedule>();
+                feeSchedules = (List<FeeSchedule>)HttpHelper.ConvertToSDKResponse(feeSchedules, response);
+                return feeSchedules;
             }
             catch (WebException webException)
             {

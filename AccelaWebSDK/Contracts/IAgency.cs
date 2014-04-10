@@ -10,6 +10,7 @@ namespace Accela.Web.SDK
 {
     public interface IAgency
     {
+        List<Agency> GetAgencies(string token);
         Agency GetAgency(string token, string agencyName);
         Stream GetAgencyLogo(string token, string agencyName);
     }

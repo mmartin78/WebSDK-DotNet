@@ -57,13 +57,43 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Fees
+        public List<RecordFees> GetRecordFeeSchedules(string recordId, string token)
+        {
+            try
+            {
+                // Validate
+                RequestValidator.ValidateToken(token);
+                if (String.IsNullOrEmpty(recordId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+
+                // get related record
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRecordFeeSchedule").Replace("{id}", recordId));
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
+
+                // create response
+                List<RecordFees> recordFees = new List<RecordFees>();
+                recordFees = (List<RecordFees>)HttpHelper.ConvertToSDKResponse(recordFees, response);
+                return recordFees;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Fees Schedule :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Fees Schedule :"));
+            }
+        }
+
         public List<RecordFees> GetRecordFees(string recordId, string token, string fields = null, string status = null)
         {
             try
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
-                if (String.IsNullOrWhiteSpace(recordId))
+                if (String.IsNullOrEmpty(recordId))
                 {
                     throw new Exception("Null Record Id provided");
                 }
