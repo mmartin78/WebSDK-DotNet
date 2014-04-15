@@ -163,7 +163,7 @@ namespace Accela.Web.SDK
             }
         }
 
-        public ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields = null, int offset = -1, int limit = -1)
+        public ResultDataPaged<Record> SearchRecords(string token, RecordFilter filter, string fields = null, int offset = -1, int limit = -1, string sortField = null, string sortOrder = null, string expand = null)
         {
             try
             {
@@ -177,6 +177,12 @@ namespace Accela.Web.SDK
                     url.Append("&fields=").Append(fields);
                 if (this.language != null)
                     url.Append("&lang=").Append(this.language);
+                if (sortField != null)
+                    url.Append("&sort=").Append(sortField);
+                if (sortOrder != null)
+                    url.Append("&direction=").Append(sortOrder);
+                if (expand != null)
+                    url.Append("&expand=").Append(expand);
 
                 RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
                 PaginationInfo paginationInfo = null;

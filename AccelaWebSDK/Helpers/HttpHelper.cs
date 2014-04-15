@@ -247,7 +247,7 @@ namespace Accela.Web.SDK
                     else if (response.Status == 200 && response.Result != null)
                     {
                         string resultString = response.Result.ToString();
-                        if (resultString.Contains("code") && resultString.Contains("isSuccess"))
+                        if (resultString.Contains("isSuccess"))
                         {
                             List<Result> result = new List<Result>();
                             result = (List<Result>)Newtonsoft.Json.JsonConvert.DeserializeObject(response.Result.ToString(), result.GetType());
