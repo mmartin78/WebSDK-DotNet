@@ -57,11 +57,9 @@ namespace Accela.Web.SDK.Models
     {
         public string entityId { get; set; }
         public string entityType { get; set; }
-        public string returnCode { get; set; }
-        public string returnMessage { get; set; }
-        public int paymentNumber { get; set; }
-        public List<PayTrail> payTrails { get; set; }
-        public bool success { get; set; }
+        public string receiptNumber { get; set; }
+        public string message { get; set; }
+        public string status { get; set; }
         public string transactionId { get; set; }
     }
 }
