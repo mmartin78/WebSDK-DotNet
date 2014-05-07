@@ -57,33 +57,32 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Record Fees
-        public List<RecordFees> GetRecordFeeSchedules(string recordId, string token)
+        public List<FeeSchedule> GetFeeScheduleForRecordType(string recordTypeId, string token)
         {
             try
             {
                 // Validate
                 RequestValidator.ValidateToken(token);
-                if (String.IsNullOrEmpty(recordId))
+                if (String.IsNullOrEmpty(recordTypeId))
                 {
-                    throw new Exception("Null Record Id provided");
+                    throw new Exception("Null Record Type Id provided");
                 }
 
-                // get related record
-                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRecordFeeSchedule").Replace("{id}", recordId));
+                StringBuilder url = new StringBuilder(apiUrl + ConfigurationReader.GetValue("GetRecordFeeSchedule").Replace("{id}", recordTypeId));
                 RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
 
                 // create response
-                List<RecordFees> recordFees = new List<RecordFees>();
-                recordFees = (List<RecordFees>)HttpHelper.ConvertToSDKResponse(recordFees, response);
-                return recordFees;
+                List<FeeSchedule> feeSchedule = new List<FeeSchedule>();
+                feeSchedule = (List<FeeSchedule>)HttpHelper.ConvertToSDKResponse(feeSchedule, response);
+                return feeSchedule;
             }
             catch (WebException webException)
             {
-                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Fees Schedule :"));
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Fee Schedule :"));
             }
             catch (Exception exception)
             {
-                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Fees Schedule :"));
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Fee Schedule :"));
             }
         }
 
