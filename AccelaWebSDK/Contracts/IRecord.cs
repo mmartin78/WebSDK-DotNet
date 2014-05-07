@@ -24,7 +24,7 @@ namespace Accela.Web.SDK
 
         // Record Fees
         List<RecordFees> GetRecordFees(string recordId, string token, string fields = null, string status = null);
-        List<RecordFees> GetRecordFeeSchedules(string recordId, string token);
+        List<FeeSchedule> GetFeeScheduleForRecordType(string recordTypeId, string token);
 
         // Record Contacts
         ResultDataPaged<Contact> GetRecordContacts(string recordId, string token, string fields = null, int offset = -1, int limit = -1);
