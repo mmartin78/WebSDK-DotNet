@@ -49,5 +49,15 @@ namespace Accela.Web.SDK
 
         // Record Status
         List<Status> GetRecordStatuses(string recordTypeId, string token);
+
+        // Record Addresses
+        List<Address> GetRecordAddresses(string recordId, string token, string isPrimary = null, string fields = null);
+        List<Result> CreateRecordAddresses(List<Address> addresses, string recordId, string token);
+        Address UpdateRecordAddress(Address address, string recordId, string token);
+        void DeleteRecordAddresses(string addressIds, string recordId, string token);
+
+        // Record CustomTables
+        List<CustomTables> GetRecordCustomTables(string recordId, string token);
+        List<CustomTables> UpdateRecordCustomTables(string recordId, List<CustomTables> customTableList, string token);
     }
 }
