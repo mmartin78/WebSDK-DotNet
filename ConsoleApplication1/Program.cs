@@ -30,7 +30,7 @@ namespace ConsoleApplication1
             string rId = "BPTMSTR-DUB14-00000-00023";
             string taskId = "4-12713";
 
-            string token = "hejTpTEaCiskuM76PiBgOa04Bjp0Yc6xDXEtNxhM5i1LTctfaAf5vxHCy0P4o8zVf2Ix9KRd5b4S_Oxf-SjvDTteS351G92fqRUkEdgC4vztCa1NugwuEyNmu40Z0moYqVu42LnAJr0bVApCGu2YIYrKm5JsmfcAMaX5TaUb2ZSYOVoGRopnO4LxQGC8pSLeRj-nDz3OozgsAduOZfYmN_Dh5C1phGpeAq-whkX8zCRTUNqHifjKtoA3MhzHwULwCT-BMHqpnRMRP7KSDR2Z-7126Lyw7_ZBjxTLAq_viPE1BeG6cuzRIURtxH_R8ARKq8sG2KMuevg3z6MOWwHj8xeL_4WiEsBpyDNzU2qE-xKiJnF2UMD_J_ixK_AZ8tQmzxqYS4QGP65gwkr0U0kn4TJc28DPKEJoJbC1N013NoYBvohetXRRCcz72cF-trzuhNQ5R6anZ_M0sxppXCjcQBMBzzKzwzZcg72-hi4PtNEgHNjSi875HFHJCkMfImW1UoljJ3grEC0KIaslu0vBDOCuOqKDmBmrJB7LdrUK7rI1";
+            string token = "Q15m_UTqi_l7kWzgtcYoPqRfy79PASyZZ7R34VT-fsFcCIOWC_yiIQnthRHfG4CwgJbJPFGqgA4G060yaV2zvEmeEWAq4Yn0_BYh69x2edQMxddeL91oiNAD56xR8GfpuH2YHggLkJ6wv3PlEoYSJfuK3U6Fk7IKd2XyRSasPVbKzd_BbVGX9yFJ-TEhJe5N3v1qdWG-2zqDBp3RDedEZ675Yl6PjD0GH5wXE6wTep7BEk-uOT9uxmdxMWUwe-h0ZLj49D56G71ExJptI2QwMAVK9r95_LNry4q9RlaTGuae6c_eoysdn3-cDmtbBErSby-NBCE4yt0FHiTm5T_NUJx2_CDXKKG2UtATx2C4V3H75DdIKuNyMxcCiDGvm_4fW7UzjSuoV_1oJnUsi7tUOF-fQEIyeIMsT31zRbN5KYi8v7bQv9wDRmLFMoshLGczNatKOybNe-L6PFvBdfwR509Oy3AXOrd7nGSEo8vu7i8y-b6Ecsc4eOObH494vRXEuIldaaJ-NUrWykgXQ5tRxnngVF37li3pbyN-0qvqZgM1";
 
             //IRecord rec = new RecordHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen, string.Empty, new AppConfigurationProvider());
             //IDocument doc = new DocumentHandler("635210919794773261", "7863eb97bb8f4f4c8a87f45f7b033d9d", ApplicationType.Citizen);
@@ -51,10 +51,9 @@ namespace ConsoleApplication1
             ResultDataPaged<Contact> cons = rec.GetRecordContacts(r.id, token);
             Contact cn = ((Contact)cons.Data.First());
 
+            List<Address> adds = rec.GetRecordAddresses(r.id, token);
+            List<CustomTables> tables = rec.GetRecordCustomTables(r.id, token);
             List<Dictionary<string, string>> cf = rec.GetRecordCustomFields(r.id, token);
-
-            // address
-            // custom table
 
             // create partial
             Record r1 = rec.CreateRecordInitialize(new Record
@@ -90,8 +89,21 @@ namespace ConsoleApplication1
             rec.UpdateRecordCustomFields(r1.id, cf, token);
 
             // create and update address
+            rec.CreateRecordAddresses(new List<Address> { adds[0] }, r1.id, token);
+            adds = rec.GetRecordAddresses(r1.id, token);
+            adds[0].postalCode = "77777";
+            rec.UpdateRecordAddress(adds[0], r1.id, token);
 
             // update custom table
+            foreach (CustomTables t in tables)
+            {
+                if (t.rows != null || t.rows.Count > 0)
+                {
+                    foreach (Rows rw in t.rows)
+                        rw.action = "add";
+                }
+            }
+            rec.UpdateRecordCustomTables(r1.id, tables, token);
 
             // upload doc.
             FileInfo file = new FileInfo(@"C:\Swapnali\TestPurposes\Ducky.jpeg");
