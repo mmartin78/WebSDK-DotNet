@@ -24,5 +24,8 @@ namespace Accela.Web.SDK.Models
             public int priority { get; set; }
             public string acaRequiredFlag { get; set; }
             public string feeAllocationType { get; set; }
+            public string effectDate { get; set; }
+            public string expireDate { get; set; }
+            public double variable { get; set; }
         }
 }

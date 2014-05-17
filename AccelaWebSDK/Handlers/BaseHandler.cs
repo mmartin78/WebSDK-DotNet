@@ -23,7 +23,7 @@ namespace Accela.Web.SDK
 
             this.apiUrl = configProvider.GetValue("Accela.WebSDK.API.Url");
 
-            ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; }; // TODO remove this
+            //ServicePointManager.ServerCertificateValidationCallback = delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; }; // TODO remove this
         }
 
         public BaseHandler(string appId, string appSecret, ApplicationType appType, IConfigurationProvider configManager)
