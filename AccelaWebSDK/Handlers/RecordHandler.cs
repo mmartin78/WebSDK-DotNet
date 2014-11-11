@@ -128,12 +128,12 @@ namespace Accela.Web.SDK
         #endregion
 
         #region Records
-        public Record GetRecord(string recordId, string token)
+        public Record GetRecord(string recordId, string token, string expand = null)
         {
             try
             {
                 // Validate
-                RequestValidator.ValidateToken(token);
+                //RequestValidator.ValidateToken(token);
                 if (String.IsNullOrWhiteSpace(recordId))
                 {
                     throw new Exception("Null Record Id provided");
@@ -141,9 +141,11 @@ namespace Accela.Web.SDK
 
                 // get record summary
                 string url = apiUrl + ConfigurationReader.GetValue("GetRecord").Replace("{recordIds}", recordId);
-                if (this.language != null)
-                    url += "?lang=" + this.language;
-                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId);
+                //if (this.language != null)
+                //    url += "?lang=" + this.language;
+                if (expand != null)
+                    url += "?expand=" + expand;
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId, this.AgencyId, this.Environment);
 
                 // create response
                 List<Record> records = new List<Record>();
@@ -167,7 +169,7 @@ namespace Accela.Web.SDK
             try
             {
                 // validate
-                RequestValidator.ValidateToken(token);
+                //RequestValidator.ValidateToken(token);
 
                 // create url
                 StringBuilder url = new StringBuilder(apiUrl);
@@ -183,7 +185,7 @@ namespace Accela.Web.SDK
                 if (expand != null)
                     url.Append("&expand=").Append(expand);
 
-                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId);
+                RESTResponse response = HttpHelper.SendPostRequest(url.ToString(), filter, token, this.appId, this.AgencyId, this.Environment);
                 PaginationInfo paginationInfo = null;
 
                 // create response
@@ -207,25 +209,62 @@ namespace Accela.Web.SDK
             try
             {
                 // validate
-                RequestValidator.ValidateToken(token);
+                //RequestValidator.ValidateToken(token);
 
                 // create url
                 StringBuilder url = new StringBuilder(apiUrl);
-                if (this.appType == ApplicationType.Agency)
-                {
+                //if (this.appType == ApplicationType.Agency)
+                //{
                     url = url.Append(ConfigurationReader.GetValue("GetRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString()); 
-                }
-                else if (this.appType == ApplicationType.Citizen)
-                {
-                    url = url.Append(ConfigurationReader.GetValue("GetMyRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
-                }
+                //}
+                //else if (this.appType == ApplicationType.Citizen)
+                //{
+                //    url = url.Append(ConfigurationReader.GetValue("GetMyRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
+                //}
                 if (!string.IsNullOrEmpty(filter))
                     url.Append("&").Append(filter);
                 if (this.language != null)
                     url.Append("&lang=").Append(this.language);
 
                 // get records
-                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId, this.AgencyId, this.Environment);
+                PaginationInfo paginationInfo = new PaginationInfo { hasmore = false, offset = offset, limit = limit };
+
+                // create response
+                //List<Record> records = new List<Record>();
+                //records = (List<Record>)HttpHelper.ConvertToSDKResponse(records, response, ref paginationInfo);
+                var records = HttpHelper.ConvertToSDKResponse<List<Record>>(response, ref paginationInfo);
+                ResultDataPaged<Record> results = new ResultDataPaged<Record> { Data = records, PageInfo = paginationInfo };
+                return results;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Records :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Records :"));
+            }
+        }
+
+        public ResultDataPaged<Record> GetMyRecords(string token, string filter, int offset = -1, int limit = -1)
+        {
+            try
+            {
+                // validate
+                RequestValidator.ValidateToken(token);
+
+                // create url
+                StringBuilder url = new StringBuilder(apiUrl);
+                url = url.Append(ConfigurationReader.GetValue("GetMyRecords")).Replace("{limit}", limit.ToString()).Replace("{offset}", offset.ToString());
+                
+                if (!string.IsNullOrEmpty(filter))
+                    url.Append("&").Append(filter);
+                if (this.language != null)
+                    url.Append("&lang=").Append(this.language);
+
+                // get records
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId, this.AgencyId, this.Environment);
                 PaginationInfo paginationInfo = new PaginationInfo { hasmore = false, offset = offset, limit = limit };
 
                 // create response
@@ -510,7 +549,7 @@ namespace Accela.Web.SDK
                 string url = apiUrl + ConfigurationReader.GetValue("UpdateRecordCustomFields").Replace("{recordId}", recordId);
                 if (this.language != null)
                     url += "?lang=" + this.language;
-                RESTResponse response = HttpHelper.SendPutRequest(url, customFieldList, token, this.appId);
+                RESTResponse response = HttpHelper.SendPutRequest(url, customFieldList, token, this.appId, this.AgencyId, this.Environment);
 
                 // create response
                 customFieldList = (List<Dictionary<string, string>>)HttpHelper.ConvertToSDKResponse(customFieldList, response);
@@ -526,6 +565,132 @@ namespace Accela.Web.SDK
                 throw new Exception(HttpHelper.HandleException(exception, "Error in Update Record Custom Fields :"));
             }
         }
+
+        public List<CustomForm> GetRecordTypeCustomForms(string recordTypeId, string token)
+        {
+            try
+            {
+                // Validate
+                if (String.IsNullOrWhiteSpace(recordTypeId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+                //RequestValidator.ValidateToken(token);
+
+                // get Custom Fields
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordTypeCustomForms").Replace("{id}", recordTypeId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId, this.AgencyId, this.Environment);
+
+                // create response
+                List<CustomForm> customFormsList = new List<CustomForm>();
+                customFormsList = (List<CustomForm>)HttpHelper.ConvertToSDKResponse(customFormsList, response);
+                return customFormsList;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Type Custom Forms :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Type Custom Forms :"));
+            }
+        }
+
+        public List<FeeSchedule> GetRecordTypeFeeSchedules(string recordTypeId, string token)
+        {
+            try
+            {
+                // Validate
+                if (String.IsNullOrWhiteSpace(recordTypeId))
+                {
+                    throw new Exception("Null Record Id provided");
+                }
+                //RequestValidator.ValidateToken(token);
+
+                // get Custom Fields
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordTypeFeeSchedules").Replace("{id}", recordTypeId);
+                if (this.language != null)
+                    url += "?lang=" + this.language;
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId, this.AgencyId, this.Environment);
+
+                // create response
+                List<FeeSchedule> feeScheduleList = new List<FeeSchedule>();
+                feeScheduleList = (List<FeeSchedule>)HttpHelper.ConvertToSDKResponse(feeScheduleList, response);
+                return feeScheduleList;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Type Custom Forms :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Type Custom Forms :"));
+            }
+        }
+
+        public List<RecordType> GetRecordTypes(string module, string token)
+        {
+            try
+            {
+                //RequestValidator.ValidateToken(token);
+
+                // get Custom Fields
+                string url = apiUrl + ConfigurationReader.GetValue("GetRecordTypes");
+                if(module != null)
+                    url += "?module=" + module;
+                    
+                if (this.language != null)
+                    url += "?lang=" + this.language;
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId, this.AgencyId, this.Environment);
+
+                // create response
+                List<RecordType> recordTypes = new List<RecordType>();
+                recordTypes = (List<RecordType>)HttpHelper.ConvertToSDKResponse(recordTypes, response);
+                return recordTypes;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Types :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Types :"));
+            }
+        }
+
+        public RecordTypeRequirements GetRecordTypeRequirements(string recordTypeId, string token)
+        {
+            try
+            {
+                //RequestValidator.ValidateToken(token);
+
+                // get Custom Fields
+                string url = apiUrl + ConfigurationReader.GetValue("DescribeRecordCreate");
+
+                if (recordTypeId != null)
+                    url += "?type=" + recordTypeId;
+                
+                if (this.language != null)
+                    url += "?lang=" + this.language;
+                RESTResponse response = HttpHelper.SendGetRequest(url, token, this.appId, this.AgencyId, this.Environment);
+
+                // create response
+                RecordTypeRequirements requirements = new RecordTypeRequirements();
+                requirements = (RecordTypeRequirements)HttpHelper.ConvertToSDKResponse(requirements, response);
+                return requirements;
+            }
+            catch (WebException webException)
+            {
+                throw new Exception(HttpHelper.HandleWebException(webException, "Error in Get Record Types :"));
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(HttpHelper.HandleException(exception, "Error in Get Record Types :"));
+            }
+        }
+
         #endregion
 
         #region Record Documents
@@ -697,7 +862,7 @@ namespace Accela.Web.SDK
                 if (fields != null)
                     url.Append("fields=").Append(fields);
 
-                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId);
+                RESTResponse response = HttpHelper.SendGetRequest(url.ToString(), token, this.appId, this.AgencyId, this.Environment);
 
                 // create response
                 List<WorkflowTask> workflowTasks = new List<WorkflowTask>();
@@ -1100,9 +1265,9 @@ namespace Accela.Web.SDK
 
                 RESTResponse response = null;
                 if (type.Equals("final"))
-                    response = HttpHelper.SendPostRequest(url.ToString(), null, token, this.appId);
+                    response = HttpHelper.SendPostRequest(url.ToString(), new { type = record.type }, token, this.appId, this.AgencyId, this.Environment);
                 else
-                    response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId);
+                    response = HttpHelper.SendPostRequest(url.ToString(), record, token, this.appId, this.AgencyId, this.Environment);
 
                 // Response
                 Record responseRecord = new Record();

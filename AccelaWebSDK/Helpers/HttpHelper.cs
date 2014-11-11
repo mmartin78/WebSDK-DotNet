@@ -83,16 +83,19 @@ namespace Accela.Web.SDK
             return null;
         }
 
-        public static RESTResponse SendPostRequest(string url, Object request, string token, string appId)
+        public static RESTResponse SendPostRequest(string url, Object request, string token, string appId, string agencyId = null, string environment = null)
         {
-            HttpWebRequest httpRequest = PrepareRequest(url, "POST", appId, token);
-            string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
-
-            // Send
-            using (StreamWriter s = new StreamWriter(httpRequest.GetRequestStream()))
+            HttpWebRequest httpRequest = PrepareRequest(url, "POST", appId, token, agencyId, environment);
+            if (request != null)
             {
-                s.Write(requestString);
-                s.Flush();
+                string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
+
+                // Send
+                using (StreamWriter s = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+                    s.Write(requestString);
+                    s.Flush();
+                }
             }
             return ReceiveRESTResponse(httpRequest);
         }
@@ -118,9 +121,9 @@ namespace Accela.Web.SDK
             return null;
         }
 
-        public static RESTResponse SendPutRequest(string url, Object request, string token, string appId)
+        public static RESTResponse SendPutRequest(string url, Object request, string token, string appId, string agencyId = null, string environment = null)
         {
-            HttpWebRequest httpRequest = PrepareRequest(url, "PUT", appId, token);
+            HttpWebRequest httpRequest = PrepareRequest(url, "PUT", appId, token, agencyId, environment);
             string requestString = Newtonsoft.Json.JsonConvert.SerializeObject(request, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, DefaultValueHandling = DefaultValueHandling.Ignore });
 
             // Send
@@ -138,9 +141,9 @@ namespace Accela.Web.SDK
             return ReceiveRESTResponse(httpRequest);
         }
 
-        public static RESTResponse SendGetRequest(string url, string token, string appId)
+        public static RESTResponse SendGetRequest(string url, string token, string appId, string agencyId = null, string environment = null)
         {
-            HttpWebRequest httpRequest = PrepareRequest(url, "GET", appId, token);
+            HttpWebRequest httpRequest = PrepareRequest(url, "GET", appId, token, agencyId, environment);
             return ReceiveRESTResponse(httpRequest);
         }
 
@@ -214,14 +217,25 @@ namespace Accela.Web.SDK
             return str.ToString();
         }
 
-        private static HttpWebRequest PrepareRequest(string url, string method, string appId, string token)
+        private static HttpWebRequest PrepareRequest(string url, string method, string appId, string token, string agency = null, string environment = null)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = method;
             request.ContentType = contentType;
             request.Accept = accept;
             request.Headers.Add(appIdHeader, appId);
-            request.Headers.Add("Authorization", token);
+            if (token != null)
+            {
+                request.Headers.Add("Authorization", token);
+            }
+            if (agency != null)
+            {
+                request.Headers.Add("x-accela-agency", agency);
+            }
+            if (environment != null)
+            {
+                request.Headers.Add("x-accela-environment", environment);
+            }
             return request;
         }
 

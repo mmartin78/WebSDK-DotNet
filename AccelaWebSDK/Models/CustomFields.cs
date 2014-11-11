@@ -12,20 +12,23 @@ namespace Accela.Web.SDK.Models
         public string value { get; set; }
     }
 
-    public class Options
+    public class Option
     {
-        public string Key { get; set; }
+        public string text { get; set; }
+        public string value { get; set; }
     }
 
     public class Field
     {
-        public Name name { get; set; }
+        public string id { get; set; }
+        public string text { get; set; }
+        public int displayOrder { get; set; }
         public bool required { get; set; }
         public string value { get; set; }
         public string isRequired { get; set; }
         public string fieldType { get; set; }
         public int maxLength { get; set; }
-        public Options options { get; set; }
+        public List<Option> options { get; set; }
     }
 
     public class ItemValue
@@ -57,6 +60,13 @@ namespace Accela.Web.SDK.Models
     {
         public string name { get; set; }
         public List<Subgroup> subgroups { get; set; }
+    }
+
+    public class CustomForm
+    {
+        public string id { get; set; }
+        public string text { get; set; }
+        public List<Field> fields { get; set; }
     }
 
     public class Table

@@ -12,7 +12,7 @@ namespace Accela.Web.SDK
         protected string appSecret;
         protected ApplicationType appType = ApplicationType.None;
         protected string language;
-
+        
         public IConfigurationProvider ConfigProvider { get; protected set; }
 
         private BaseHandler(IConfigurationProvider configProvider)
@@ -40,5 +40,8 @@ namespace Accela.Web.SDK
             if (!string.IsNullOrEmpty(lang))
                 this.language = lang;
         }
+
+        public string AgencyId { get; set;}
+        public string Environment { get; set; }
     }
 }

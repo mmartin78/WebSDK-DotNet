@@ -31,6 +31,34 @@ namespace Accela.Web.SDK.Models
         public bool searchable { get; set; }
     }
 
+    public struct FieldInfo
+    {
+        public string name;
+        public bool isRequired;
+    }
+
+    public struct ElementType
+    {
+        public string value;
+        public int maxOccurance;
+        public int minOccurance;
+    }
+
+    public struct Element
+    {
+        public string name;
+        public bool isRequired;
+        public bool isReference;
+        public List<ElementType> types;
+
+    }
+
+    public class RecordTypeRequirements
+    {
+        public List<FieldInfo> fields;
+        public List<Element> elements;
+    }
+
     public class ConstructionType
     {
         public string text { get; set; }
@@ -247,7 +275,7 @@ namespace Accela.Web.SDK.Models
         public string completeDate { get; set; }
         public string name { get; set; }
         public Priority priority { get; set; }
-        public int trackingId { get; set; }
+        public long trackingId { get; set; }
         public string enforceOfficerName { get; set; }
         public string statusDate { get; set; }
         public string customId { get; set; }

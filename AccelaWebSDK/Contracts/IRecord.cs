@@ -10,8 +10,9 @@ namespace Accela.Web.SDK
     public interface IRecord
     {
         // Records
-        Record GetRecord(string recordId, string token);
+        Record GetRecord(string recordId, string token, string expand = null);
         ResultDataPaged<Record> GetRecords(string token, string filter, int offset = -1, int limit = -1);
+        ResultDataPaged<Record> GetMyRecords(string token, string filter, int offset = -1, int limit = -1);
         Record CreateRecord(Record record, string token);
         Record CreateRecordInitialize(Record record, string token, string isFeeEstimate = null);
         Record CreateRecordFinalize(Record record, string token);
@@ -59,5 +60,11 @@ namespace Accela.Web.SDK
         // Record CustomTables
         List<CustomTables> GetRecordCustomTables(string recordId, string token);
         List<CustomTables> UpdateRecordCustomTables(string recordId, List<CustomTables> customTableList, string token);
+
+        // Record Type Custom Fields
+        List<CustomForm> GetRecordTypeCustomForms(string recordTypeId, string token);
+        List<FeeSchedule> GetRecordTypeFeeSchedules(string recordTypeId, string token);
+        List<RecordType> GetRecordTypes(string module, string token);
+        RecordTypeRequirements GetRecordTypeRequirements(string recordTypeId, string token);
     }
 }

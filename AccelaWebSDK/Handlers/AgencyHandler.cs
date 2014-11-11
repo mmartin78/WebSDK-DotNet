@@ -48,7 +48,7 @@ namespace Accela.Web.SDK
                 {
                     throw new Exception("Null Agency Name provided");
                 }
-                RequestValidator.ValidateToken(token);
+                //RequestValidator.ValidateToken(token);
 
                 // get agency
                 string url = apiUrl + ConfigurationReader.GetValue("GetAgency").Replace("{name}", agencyName);
